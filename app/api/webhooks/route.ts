@@ -4,6 +4,7 @@ import { WebhookEvent, clerkClient } from '@clerk/nextjs/server'
 import { createStudent } from '@/lib/actions/student.actions'
 import { createTeacher } from '@/lib/actions/teacher.actions'
 import { createUnathorizedUser } from '@/lib/actions/unauthorized_user.actions'
+import { User } from '@/lib/database/models/user.model'
 
 export async function POST(req: Request) {
 
@@ -76,15 +77,18 @@ export async function POST(req: Request) {
 
       switch (true) {
         case user.email.endsWith('@student.upt.ro'):
-            const newStudent = await createStudent(user);
+            const newStudent: User = await createStudent(user);
+            await updateUserMetadata(user.clerkId, 'student', newStudent._id);
         break;
         
         case user.email.endsWith('@upt.ro') || user.email.endsWith('github@gmail.com'):
-            const newTeacher = await createTeacher(user);
+            const newTeacher: User = await createTeacher(user);
+            await updateUserMetadata(user.clerkId, 'teacher', newTeacher._id);
         break
 
         default:
-            const newUnauthorizedUser = await createUnathorizedUser(user);
+            const newUnauthorizedUser: User = await createUnathorizedUser(user);
+            await updateUserMetadata(user.clerkId, 'unauthorized_user', newUnauthorizedUser._id);
         break;
       }
   }
