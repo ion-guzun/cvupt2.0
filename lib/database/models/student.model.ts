@@ -1,6 +1,8 @@
 import { Schema, model, models } from "mongoose";
 import { CreateUserParams, User, UserSchema } from "./user.model";
 
+export type InitialCreateStudentParams = CreateUserParams;
+
 export interface Student extends User {
     major: string
     year: number

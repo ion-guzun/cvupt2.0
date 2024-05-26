@@ -1,6 +1,9 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent, clerkClient } from '@clerk/nextjs/server'
+import { createStudent } from '@/lib/actions/student.actions'
+import { createTeacher } from '@/lib/actions/teacher.actions'
+import { createUnathorizedUser } from '@/lib/actions/unauthorized_user.actions'
 
 export async function POST(req: Request) {
 
@@ -62,26 +65,26 @@ export async function POST(req: Request) {
   }
 
   if(eventType === 'user.created') {
-    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+    const { id, email_addresses, image_url, first_name, last_name} = evt.data;
     const user = {
         clerkId: id,
-        email: email_addresses[0].email_address,
         firstName: first_name,
         lastName: last_name,
+        email: email_addresses[0].email_address,
         photo: image_url,
       }
 
       switch (true) {
         case user.email.endsWith('@student.upt.ro'):
-            // const newStudent = await createStudent(user);
+            const newStudent = await createStudent(user);
         break;
         
         case user.email.endsWith('@upt.ro') || user.email.endsWith('github@gmail.com'):
-            // const newTeacher = await createTeacher(user);
+            const newTeacher = await createTeacher(user);
         break
 
         default:
-            // const newUnauthorizedUser = await createNewUnauthorizedUser(user);
+            const newUnauthorizedUser = await createUnathorizedUser(user);
         break;
       }
   }
