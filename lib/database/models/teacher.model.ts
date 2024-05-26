@@ -1,5 +1,9 @@
 import { Schema, model, models } from "mongoose";
-import { UserSchema } from "./user.model";
+import { User, UserSchema } from "./user.model";
+
+export interface Teacher extends User {
+    coursesCreated: string[]
+}
 
 const TeacherSchema = new Schema({
     ...UserSchema.obj,

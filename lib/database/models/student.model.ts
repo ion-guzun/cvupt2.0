@@ -1,5 +1,12 @@
 import { Schema, model, models } from "mongoose";
-import { UserSchema } from "./user.model";
+import { CreateUserParams, User, UserSchema } from "./user.model";
+
+export interface Student extends User {
+    major: string
+    year: number
+    coursesEnrolledIn: string[]
+}
+
 
 const StudentSchema = new Schema({
     ...UserSchema.obj,

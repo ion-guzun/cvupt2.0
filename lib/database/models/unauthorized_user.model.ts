@@ -1,5 +1,7 @@
 import { Schema, model, models } from "mongoose";
-import { UserSchema } from "./user.model";
+import { User, UserSchema } from "./user.model";
+
+export interface UnauthorizedUser extends User {}
 
 const UnauthorizedUserSchema = new Schema({
     ...UserSchema.obj,
