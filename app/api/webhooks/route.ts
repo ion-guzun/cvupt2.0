@@ -76,24 +76,22 @@ export async function POST(req: Request) {
         photo: image_url,
       }
 
-      switch (true) {
-        case user.email.endsWith('@student.upt.ro'):
+      
+        if(user.email.endsWith('@student.upt.ro')) {
             const newStudent: User = await createStudent(user);
-            console.log(newStudent ? 'y' : 'n');    
             await updateUserMetadata(user.clerkId, 'student', newStudent._id);
-        break;
+        }
         
-        case user.email.endsWith('@upt.ro') || user.email.endsWith('github@gmail.com'):
+        else if(user.email.endsWith('@upt.ro') || user.email.endsWith('github@gmail.com')) {
             const newTeacher: User = await createTeacher(user);
             await updateUserMetadata(user.clerkId, 'teacher', newTeacher._id);
-        break
+        }
 
-        default:
+        else { 
             const newUnauthorizedUser: User = await createUnathorizedUser(user);
             await updateUserMetadata(user.clerkId, 'unauthorized_user', newUnauthorizedUser._id);
-        break;
-      }
-      return NextResponse.json({message: 'OK', user: user});
+        }
+      return NextResponse.json({message: 'OK', newUser: user});
   }
 
   return new Response('', { status: 200 })
