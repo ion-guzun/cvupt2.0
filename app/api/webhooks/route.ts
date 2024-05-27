@@ -5,6 +5,7 @@ import { createStudent } from '@/lib/actions/student.actions'
 import { createTeacher } from '@/lib/actions/teacher.actions'
 import { createUnathorizedUser } from '@/lib/actions/unauthorized_user.actions'
 import { User } from '@/lib/database/models/user.model'
+import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
 
@@ -92,6 +93,7 @@ export async function POST(req: Request) {
             await updateUserMetadata(user.clerkId, 'unauthorized_user', newUnauthorizedUser._id);
         break;
       }
+      return NextResponse.json({message: 'OK', user: user});
   }
 
   return new Response('', { status: 200 })
