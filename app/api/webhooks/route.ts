@@ -69,8 +69,8 @@ export async function POST(req: Request) {
     const { id, email_addresses, image_url, first_name, last_name} = evt.data;
     const user = {
         clerkId: id,
-        firstName: first_name,
-        lastName: last_name,
+        firstName: first_name!,
+        lastName: last_name!,
         email: email_addresses[0].email_address,
         photo: image_url,
       }
@@ -78,6 +78,7 @@ export async function POST(req: Request) {
       switch (true) {
         case user.email.endsWith('@student.upt.ro'):
             const newStudent: User = await createStudent(user);
+            console.log(newStudent ? 'y' : 'n');    
             await updateUserMetadata(user.clerkId, 'student', newStudent._id);
         break;
         

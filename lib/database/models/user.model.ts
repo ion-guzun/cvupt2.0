@@ -2,8 +2,8 @@ import { Schema} from "mongoose";
 
 export type CreateUserParams = {
   clerkId: string
-  firstName: string | null
-  lastName: string | null
+  firstName: string 
+  lastName: string
   email: string
   photo: string
 }
