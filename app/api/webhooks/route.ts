@@ -2,7 +2,6 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent, clerkClient } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
-import { redirect } from 'next/navigation'
 import { createStudent } from '@/lib/actions/student.actions'
 import { createTeacher } from '@/lib/actions/teacher.actions'
 
@@ -65,41 +64,55 @@ export async function POST(req: Request) {
     });
   }
   
-  if(eventType === 'user.created') {
-    const {id, email_addresses, image_url, first_name, last_name, } = evt.data;
-
+  if (eventType === 'user.created') {
+    const { id, email_addresses, image_url, first_name, last_name } = evt.data;
 
     const user = {
-        clerkId: id,
-        firstName: first_name!,
-        lastName: last_name!,
-        email: email_addresses[0].email_address,
-        photo: image_url,
-    }
-    
-    switch (true) {
-        case user.email.endsWith('@student.upt.ro'):
-          const newStudent = await createStudent(user);
-          if (newStudent) {
-            console.log(newStudent);
-            await updateUserMetadata(id, 'student', newStudent._id);
-            return NextResponse.json({ message: 'OK', student: newStudent });
-          }
-        break;
+      clerkId: id,
+      firstName: first_name!,
+      lastName: last_name!,
+      email: email_addresses[0].email_address,
+      photo: image_url,
+    };
 
-        case user.email.endsWith('github@gmail.com'):
-          const newTeacher = await createTeacher(user);
-          if (newTeacher) {
-            await updateUserMetadata(id, 'teacher', newTeacher._id);
-            return NextResponse.json({ message: 'OK', teacher: newTeacher });
-          }
-        break;
+    if (user.email.endsWith('@student.upt.ro')) {
+      // ----------- log here -----------
+      console.log("user email ends with - @student.upt.ro - userEmail", user.email);
+      console.log(user);
 
-        default:
-          console.warn(`User with email ${user.email} has an unrecognized domain.`);
-          return new Response('Unrecognized email domain.', { status: 400 });
+      try {
+        const newStudent = await createStudent(user);
+        if (newStudent) {
+          console.log("New student created:", newStudent);
+          await updateUserMetadata(id, 'student', newStudent._id);
+          return NextResponse.json({ message: 'OK', student: newStudent });
+        }
+      } catch (error) {
+        console.error("Error creating student:", error);
+        return new Response('Error creating student.', { status: 500 });
+      }
+
+    } else if (user.email.endsWith('github@gmail.com')) {
+      // ----------- log here -----------
+      console.log("user email ends with - github@gmail.com - userEmail", user.email);
+      console.log(user);
+
+      try {
+        const newTeacher = await createTeacher(user);
+        if (newTeacher) {
+          console.log("New teacher created:", newTeacher);
+          await updateUserMetadata(id, 'teacher', newTeacher._id);
+          return NextResponse.json({ message: 'OK', teacher: newTeacher });
+        }
+      } catch (error) {
+        console.error("Error creating teacher:", error);
+        return new Response('Error creating teacher.', { status: 500 });
+      }
+
+    } else {
+      console.warn(`User with email ${user.email} has an unrecognized domain.`);
+      return new Response('Unrecognized email domain.', { status: 400 });
     }
-    
   }
 
   return new Response('', { status: 200 })
