@@ -9,7 +9,7 @@ export type CreateCourseParams = {
     photo: string
 }
 
-export interface Course {
+export interface ICourse {
     _id: string
     name: string
     createdBy: string

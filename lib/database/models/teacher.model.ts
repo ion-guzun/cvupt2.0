@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
-import { User, UserSchema } from "./user.model";
+import { IUser, UserSchema } from "./user.model";
 
-export interface Teacher extends User {
+export interface ITeacher extends IUser {
     coursesCreated: string[]
 }
 

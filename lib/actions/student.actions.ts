@@ -1,7 +1,7 @@
 'use server'
 
 import { connectToDatabase } from "../database"
-import Student, { InitialCreateStudentParams } from "../database/models/student.model";
+import Student, { IStudent } from "../database/models/student.model";
 import { CreateUserParams } from "../database/models/user.model";
 
 export async function createStudent(student: CreateUserParams) {
@@ -15,3 +15,16 @@ export async function createStudent(student: CreateUserParams) {
       console.log(error);
     }
 }
+
+export async function hasMajorAndYear(studentRef: string) {
+  try {
+    await connectToDatabase();
+
+    const student: IStudent | null = await Student.findById(studentRef);
+    return student?.major !== '' && student?.year !== 0;
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+

@@ -1,9 +1,7 @@
 import { Schema, model, models } from "mongoose";
-import { CreateUserParams, User, UserSchema } from "./user.model";
+import { IUser, UserSchema } from "./user.model";
 
-export type InitialCreateStudentParams = CreateUserParams;
-
-export interface Student extends User {
+export interface IStudent extends IUser {
     major: string
     year: number
     coursesEnrolledIn: string[]
@@ -12,8 +10,8 @@ export interface Student extends User {
 
 const StudentSchema = new Schema({
     ...UserSchema.obj,
-    major: {type: String},
-    year: {type: Number},
+    major: {type: String, default: ''},
+    year: {type: Number, default: 0},
     coursesEnrolledIn: [{type: Schema.Types.ObjectId, ref: 'Course'}]
 })
 

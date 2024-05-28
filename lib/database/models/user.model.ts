@@ -8,7 +8,7 @@ export type CreateUserParams = {
   photo: string
 }
 
-export interface User {
+export interface IUser {
   _id: string
   clerkId: string
   email: string
