@@ -3,9 +3,6 @@ import React, { use } from "react";
 import { Header } from "@/components/Header";
 import ContentManager from "@/components/ContentManager";
 import { Item } from "@/types";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { getUserObjectId} from "@/helpers";
-import { hasMajorAndYear } from "@/lib/actions/student.actions";
 
 const initialItems: Item[] = [
   {
