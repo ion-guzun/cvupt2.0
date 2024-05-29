@@ -40,4 +40,10 @@ export const faculties: UPTFaculty[] = [
         specialities: ['IEI', 'IEEEE', 'IEC', 'IEICM'],
         url: 'http://www.mpt.upt.ro'
     },
+    {
+        name: 'ARH',
+        specialities: ['ARH', 'MAI', 'FI'],
+        url: 'http://www.arh.upt.ro'
+    }
 ]
+
