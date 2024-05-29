@@ -24,4 +24,10 @@ export interface Content {
   export interface MainContentProps {
     content: Content;
   }
+
+  export interface ICompleteStudentProfile {
+    faculty: string;
+    major: string
+    year: number | null
+  }
   

@@ -16,12 +16,12 @@ export async function createStudent(student: CreateUserParams) {
     }
 }
 
-export async function hasMajorAndYear(studentRef: string) {
+export async function hasCompletedStudentProfile(studentRef: string) {
   try {
     await connectToDatabase();
 
     const student: IStudent | null = await Student.findById(studentRef);
-    return student?.major !== '' && student?.year !== 0;
+    return student?.major !== '' && student?.year !== 0 && student?.faculty != '';
 
   } catch (error) {
     console.log(error);

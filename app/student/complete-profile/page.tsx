@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { faculties } from '@/real_data';
+import { ICompleteStudentProfile } from '@/types';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -44,11 +45,16 @@ const CompleteProfile = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log({
+    const formData: ICompleteStudentProfile = {
       faculty: selectedFaculty,
       major: selectedSpeciality,
       year: selectedYear
-    });
+    }
+    
+    fetch("/api/student/complete-profile", {
+      method: "POST",
+      body: JSON.stringify(formData)
+    })
     r.push("/");
   };
 
