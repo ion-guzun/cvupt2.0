@@ -7,6 +7,8 @@ export type CreateCourseParams = {
     forSemester: 1 | 2
     pdfs: string[]
     photo: string
+    startDate: Date
+    endDate: Date
 }
 
 export interface ICourse {
@@ -19,6 +21,8 @@ export interface ICourse {
     studentsEnrolledIn: string[]
     pdfs: string[]
     photo: string
+    startDate: Date
+    endDate: Date
 }
 
 export const CourseSchema = new Schema({
@@ -30,6 +34,8 @@ export const CourseSchema = new Schema({
     studentsEnrolledIn: [{type: Schema.Types.ObjectId, ref: 'Student'}],
     pdfs: {type: [String], required: true},
     photo: {type: String, required: true},
+    startDate: {type: Date, default: Date.now()},
+    endDate: {type: Date, default: Date.now()}
 })
 
 const Course = models.Course || model('Course', CourseSchema);

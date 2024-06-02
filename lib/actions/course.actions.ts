@@ -1,3 +1,5 @@
+'use server'
+
 import { connectToDatabase } from "../database";
 import Course, { CreateCourseParams } from "../database/models/course.model";
 
