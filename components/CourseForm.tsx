@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Dropdown } from "./Dropdown"
+import { DatePicker } from "./DatePicker"
 
 type CourseFormProps = {
   teacherRef: string
@@ -27,6 +28,14 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
 
   const selectedFaculty = useWatch({ control: form.control, name: "forFaculty" });
   const selectedSpeciality = useWatch({ control: form.control, name: "forMajor" });
+
+  const handleStartDateSelect = (date: Date | undefined) => {
+    form.setValue("startDate", date!); 
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    form.setValue("endDate", date!); 
+  };
 
   function onSubmit(values: z.infer<typeof courseFormSchema>) {
     console.log(values)
@@ -121,6 +130,33 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker onDateSelect={handleStartDateSelect} type="start" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker onDateSelect={handleEndDateSelect} type="end" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit" className="w-full">Submit</Button>
         </form>
       </Form>

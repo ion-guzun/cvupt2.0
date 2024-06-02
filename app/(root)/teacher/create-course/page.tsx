@@ -3,9 +3,7 @@ import { getUserObjectId } from "@/helpers"
 
 const CreateCourse = () => {
   return (
-      <CourseForm 
-        teacherRef={getUserObjectId()} 
-        type="create"
+      <CourseForm teacherRef={getUserObjectId()} type="create"
       />
   )
 }

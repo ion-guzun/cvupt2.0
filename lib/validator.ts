@@ -1,4 +1,7 @@
 import { z } from "zod"
+const today = new Date();
+const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
 export const courseFormSchema = z.object({
     name: z.string().min(2, {message: "Course name must be at least 2 characters."}),
     forFaculty: z.string().min(2, {message: 'you need to choose a faculty'}),
@@ -7,8 +10,8 @@ export const courseFormSchema = z.object({
     forSemester: z.string().min(1, {message: 'you need to choose the year'}),
     // imageUrl: z.string().url(),
     // pdfUrls: z.string().url().array(),
-    // startDate: z.date(),
-    // endDate: z.date()
+    startDate: z.date().min(currentDate),
+    endDate: z.date().min(currentDate)
 })
 
 export const initialValues = {
@@ -19,6 +22,6 @@ export const initialValues = {
     forSemester: '',
     // imageUrl: '',
     // pdfUrls: [],
-    // startDate: new Date(),
-    // endDate: new Date()
+    startDate: new Date(),
+    endDate: new Date()
 }
