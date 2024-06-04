@@ -20,6 +20,7 @@ import { useUploadThing } from "@/utils/uploadthing"
 import { createCourse } from "@/lib/actions/course.actions"
 import { CreateCourseParams, ICourse } from "@/lib/database/models/course.model"
 import { useRouter } from "next/navigation"
+import { PdfUploader } from "./file-uploaders/PdfUploader"
 
 type CourseFormProps = {
   teacherRef: string
@@ -28,8 +29,22 @@ type CourseFormProps = {
 
 const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
   const r = useRouter();
+
+  
+  //----------------------------IMAGE UPLOADING STATE----------------------------
   const [files, setFiles] = useState<File[]>([]);
   const {startUpload} = useUploadThing('imageUploader');
+  //----------------------------IMAGE UPLOADING STATE----------------------------
+
+
+  //----------------------------PDF UPLAODING STATE-------------------------------
+
+  const [pdfUrls, setPdfUrls] = useState<string[]>([]); 
+  //this comes from the child component
+
+  //----------------------------PDF UPLAODING STATE-------------------------------
+
+
   const form = useForm<z.infer<typeof courseFormSchema>>({
     resolver: zodResolver(courseFormSchema),
     defaultValues: initialValues
@@ -47,6 +62,7 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
   };
 
   async function onSubmit(values: z.infer<typeof courseFormSchema>) {
+    //-----------------------IMAGE UPLOADING STUFF------------------------------
     let uploadedImageUrl = values.imageUrl;
     if(files.length > 0) {
       const uploadedImages = await startUpload(files);
@@ -56,6 +72,8 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
       uploadedImageUrl = uploadedImages[0].url;
       console.log(uploadedImageUrl);
     }
+    //-----------------------IMAGE UPLOADING STUFF-------------------------------
+
 
     const newCourse: CreateCourseParams = {
       name: values.name,
@@ -65,6 +83,7 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
       forYear: parseInt(values.forYear),
       forSemester: parseInt(values.forSemester),
       photo: uploadedImageUrl,
+      pdfs: pdfUrls,
       startDate: values.startDate,
       endDate: values.endDate
     }
@@ -210,6 +229,19 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
                       imageUrl={field.value}
                       setFiles={setFiles}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pdfUrls"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <PdfUploader setPdfUrls={setPdfUrls}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

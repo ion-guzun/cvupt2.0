@@ -9,6 +9,7 @@ export const courseFormSchema = z.object({
     forYear: z.string().min(1, {message: 'you need to choose the year'}),
     forSemester: z.string().min(1, {message: 'you need to choose the semester'}),
     imageUrl: z.string().url({ message: 'Invalid URL' }).optional().or(z.literal('')),
+    pdfUrls: z.string().url().array(),
     startDate: z.date().min(currentDate),
     endDate: z.date().min(currentDate)
 })
@@ -20,6 +21,7 @@ export const initialValues = {
     forYear: '',
     forSemester: '',
     imageUrl: '',
+    pdfUrls: [],
     startDate: new Date(),
     endDate: new Date()
 }

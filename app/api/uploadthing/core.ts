@@ -24,11 +24,17 @@ export const ourFileRouter = {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
  
-      console.log("file url", file.url);
+      console.log("image url:", file.url);
  
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
     }),
+    
+    pdfUploader: f({pdf: {maxFileSize: '4MB'}})
+    .onUploadComplete(async ({file}) => {
+      console.log('pdf url:', file.url);
+      return {message: 'Pdf Upload Complete'};
+    })
 } satisfies FileRouter;
  
 export type OurFileRouter = typeof ourFileRouter;
