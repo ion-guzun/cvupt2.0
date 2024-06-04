@@ -2,11 +2,12 @@ import { Schema, model, models } from "mongoose";
 
 export type CreateCourseParams = {
     name: string
+    forFaculty: string
     forMajor: string
     forYear: number
-    forSemester: 1 | 2
-    pdfs: string[]
-    photo: string
+    forSemester: number
+    pdfs?: string[]
+    photo: string | undefined
     startDate: Date
     endDate: Date
 }
@@ -15,11 +16,12 @@ export interface ICourse {
     _id: string
     name: string
     createdBy: string
+    forFaculty: string
     forMajor: string
     forYear: number
-    forSemester: 1 | 2
+    forSemester: number
     studentsEnrolledIn: string[]
-    pdfs: string[]
+    pdfs?: string[]
     photo: string
     startDate: Date
     endDate: Date
@@ -28,6 +30,7 @@ export interface ICourse {
 export const CourseSchema = new Schema({
     name: {type: String, required: true},
     createdBy: {type: Schema.Types.ObjectId, ref: 'Teacher'},
+    forFaculty: {type: String, required: true},
     forMajor: {type: String, required: true},
     forYear: {type: Number, required: true},
     forSemester: {type: Number, required: true, enum: [1, 2]},

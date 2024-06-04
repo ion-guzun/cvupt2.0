@@ -14,6 +14,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Dropdown } from "./Dropdown"
 import { DatePicker } from "./DatePicker"
+import { ImageUploader } from "./file-uploaders/ImageUploader"
+import { useState } from "react"
+import { useUploadThing } from "@/utils/uploadthing"
+import { createCourse } from "@/lib/actions/course.actions"
+import { CreateCourseParams, ICourse } from "@/lib/database/models/course.model"
+import { useRouter } from "next/navigation"
 
 type CourseFormProps = {
   teacherRef: string
@@ -21,6 +27,9 @@ type CourseFormProps = {
 }
 
 const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
+  const r = useRouter();
+  const [files, setFiles] = useState<File[]>([]);
+  const {startUpload} = useUploadThing('imageUploader');
   const form = useForm<z.infer<typeof courseFormSchema>>({
     resolver: zodResolver(courseFormSchema),
     defaultValues: initialValues
@@ -37,129 +46,179 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
     form.setValue("endDate", date!); 
   };
 
-  function onSubmit(values: z.infer<typeof courseFormSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof courseFormSchema>) {
+    let uploadedImageUrl = values.imageUrl;
+    if(files.length > 0) {
+      const uploadedImages = await startUpload(files);
+      if(!uploadedImages) {
+        return
+      }
+      uploadedImageUrl = uploadedImages[0].url;
+      console.log(uploadedImageUrl);
+    }
+
+    const newCourse: CreateCourseParams = {
+      name: values.name,
+      forFaculty: values.forFaculty,
+      forMajor: values.forMajor,
+      forYear: parseInt(values.forYear),
+      forSemester: parseInt(values.forSemester),
+      photo: uploadedImageUrl,
+      startDate: values.startDate,
+      endDate: values.endDate
+    }
+
+    if(type === 'create') {
+      try {
+        const createdCourse: ICourse = await createCourse(newCourse);
+        if(createdCourse) {
+          form.reset();
+          r.push('/');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white p-10 rounded shadow-md w-full max-w-lg space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="Input course name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Input course name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="forFaculty"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Dropdown 
-                    onChangeHandler={field.onChange} 
-                    value={field.value}
-                    type="faculty"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="forFaculty"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Dropdown 
+                      onChangeHandler={field.onChange} 
+                      value={field.value}
+                      type="faculty"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="forMajor"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Dropdown 
-                    onChangeHandler={field.onChange} 
-                    value={field.value}
-                    type="speciality"
-                    disabled={!selectedFaculty}
-                    selectedFaculty={selectedFaculty}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="forMajor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Dropdown 
+                      onChangeHandler={field.onChange} 
+                      value={field.value}
+                      type="speciality"
+                      disabled={!selectedFaculty}
+                      selectedFaculty={selectedFaculty}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="forYear"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Dropdown 
-                    onChangeHandler={field.onChange} 
-                    value={field.value}
-                    type="year"
-                    disabled={!selectedSpeciality}
-                    selectedSpeciality={selectedSpeciality}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="forYear"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Dropdown 
+                      onChangeHandler={field.onChange} 
+                      value={field.value}
+                      type="year"
+                      disabled={!selectedSpeciality}
+                      selectedSpeciality={selectedSpeciality}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="forSemester"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Dropdown 
-                    onChangeHandler={field.onChange} 
-                    value={field.value}
-                    type="semester"
-                    disabled={!selectedSpeciality}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="forSemester"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Dropdown 
+                      onChangeHandler={field.onChange} 
+                      value={field.value}
+                      type="semester"
+                      disabled={!selectedSpeciality}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <DatePicker onDateSelect={handleStartDateSelect} type="start" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DatePicker onDateSelect={handleStartDateSelect} type="start" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="endDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <DatePicker onDateSelect={handleEndDateSelect} type="end" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DatePicker onDateSelect={handleEndDateSelect} type="end" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type="submit" className="w-full">Submit</Button>
-        </form>
-      </Form>
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ImageUploader
+                      onFieldChange={field.onChange}
+                      imageUrl={field.value}
+                      setFiles={setFiles}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full">Submit</Button>
+          </form>
+        </Form>
+      </div>
     </div>
   )
 }
