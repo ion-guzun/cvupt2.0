@@ -204,7 +204,7 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUploader
+                    <ImageUploader //forgotted to add uploadthing env's to vercel(
                       onFieldChange={field.onChange}
                       imageUrl={field.value}
                       setFiles={setFiles}
