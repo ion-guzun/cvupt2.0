@@ -2,6 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 export type CreateCourseParams = {
     name: string
+    createdBy: string
     forFaculty: string
     forMajor: string
     forYear: number
@@ -29,7 +30,7 @@ export interface ICourse {
 
 export const CourseSchema = new Schema({
     name: {type: String, required: true},
-    createdBy: {type: Schema.Types.ObjectId, ref: 'Teacher'},
+    createdBy: {type: Schema.Types.ObjectId, ref: 'Teacher', default: undefined},
     forFaculty: {type: String, required: true},
     forMajor: {type: String, required: true},
     forYear: {type: Number, required: true},

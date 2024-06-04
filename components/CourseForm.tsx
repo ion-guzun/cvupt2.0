@@ -59,6 +59,7 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
 
     const newCourse: CreateCourseParams = {
       name: values.name,
+      createdBy: teacherRef,
       forFaculty: values.forFaculty,
       forMajor: values.forMajor,
       forYear: parseInt(values.forYear),
