@@ -13,7 +13,7 @@ export const ImageUploader = ({imageUrl, onFieldChange, setFiles}: ImageUploader
   const {toast} = useToast();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    
       <UploadButton
         endpoint="imageUploader"
         onClientUploadComplete={(res) => {
@@ -34,6 +34,5 @@ export const ImageUploader = ({imageUrl, onFieldChange, setFiles}: ImageUploader
           });
         }}
       />
-    </main>
   );
 }

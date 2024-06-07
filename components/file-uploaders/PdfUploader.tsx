@@ -13,7 +13,7 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({ setPdfUrls }) => {
     const handleUploadComplete = (res: { url: string }[]) => {
         const newUrl = res[0].url;
         setLocalPdfUrls(current => [...current, newUrl]);
-        setPdfUrls(current => [...current, newUrl]); // pass data to the parent component
+        setPdfUrls(current => [...current, newUrl]); // pass data to the parent component, (push the state up)
         toast({
           title: "PDF Uploaded Successfully",
           duration: 5000
@@ -29,7 +29,7 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({ setPdfUrls }) => {
     };
 
     return (
-        <div>
+        <>
             <UploadButton
                 className="ut-button:bg-slate-600"
                 endpoint="pdfUploader"
@@ -39,6 +39,6 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({ setPdfUrls }) => {
             <ul>
               {localPdfUrls.map((url, index) => <li key={index}>{url}</li>)}
             </ul>
-        </div>
+        </>
     );
 };

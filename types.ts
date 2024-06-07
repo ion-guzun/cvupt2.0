@@ -30,4 +30,5 @@ export interface Content {
     major: string
     year: number | null
   }
+
   

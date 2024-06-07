@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -102,129 +103,130 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Input course name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="forFaculty"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Dropdown 
-                      onChangeHandler={field.onChange} 
-                      value={field.value}
-                      type="faculty"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="forMajor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Dropdown 
-                      onChangeHandler={field.onChange} 
-                      value={field.value}
-                      type="speciality"
-                      disabled={!selectedFaculty}
-                      selectedFaculty={selectedFaculty}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="forYear"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Dropdown 
-                      onChangeHandler={field.onChange} 
-                      value={field.value}
-                      type="year"
-                      disabled={!selectedSpeciality}
-                      selectedSpeciality={selectedSpeciality}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="forSemester"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Dropdown 
-                      onChangeHandler={field.onChange} 
-                      value={field.value}
-                      type="semester"
-                      disabled={!selectedSpeciality}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <DatePicker onDateSelect={handleStartDateSelect} type="start" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <DatePicker onDateSelect={handleEndDateSelect} type="end" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
+      <h2 className="text-3xl font-semibold mb-6">Create a course</h2>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Input course name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="forFaculty"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Dropdown 
+                    onChangeHandler={field.onChange} 
+                    value={field.value}
+                    type="faculty"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="forMajor"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Dropdown 
+                    onChangeHandler={field.onChange} 
+                    value={field.value}
+                    type="speciality"
+                    disabled={!selectedFaculty}
+                    selectedFaculty={selectedFaculty}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="forYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Dropdown 
+                    onChangeHandler={field.onChange} 
+                    value={field.value}
+                    type="year"
+                    disabled={!selectedSpeciality}
+                    selectedSpeciality={selectedSpeciality}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="forSemester"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Dropdown 
+                    onChangeHandler={field.onChange} 
+                    value={field.value}
+                    type="semester"
+                    disabled={!selectedSpeciality}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker onDateSelect={handleStartDateSelect} type="start" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker onDateSelect={handleEndDateSelect} type="end" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+  
+          <div className="flex space-x-4">
             <FormField
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUploader //forgotted to add uploadthing env's to vercel(
+                    <ImageUploader
                       onFieldChange={field.onChange}
                       imageUrl={field.value}
                       setFiles={setFiles}
@@ -234,7 +236,7 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
                 </FormItem>
               )}
             />
-
+  
             <FormField
               control={form.control}
               name="pdfUrls"
@@ -247,13 +249,20 @@ const CourseForm = ({ teacherRef, type }: CourseFormProps) => {
                 </FormItem>
               )}
             />
-
-            <Button type="submit" className="w-full">Submit</Button>
-          </form>
-        </Form>
-      </div>
+          </div>
+  
+          <div className="flex justify-center">
+            <Button type="submit">
+              Submit
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   )
+  
+  
+  
 }
 
 export default CourseForm

@@ -6,6 +6,31 @@ export const getUserObjectId = () => {
     return userId;
 }
 
+export const isStudent = () => {
+    const {sessionClaims} = auth();
+    const userType = sessionClaims?.userType as string;
+    return userType === 'student';
+}
+
+export const isTeacher = () => {
+    const {sessionClaims} = auth();
+    const userType = sessionClaims?.userType as string;
+    return userType === 'teacher';
+}
+
+export const isUnauthorized = () => {
+    const {sessionClaims} = auth();
+    const userType = sessionClaims?.userType as string;
+    return userType !== 'student' && userType !== 'teacher';
+}
+
+
+
+
+
+
+
+
 
 
 
