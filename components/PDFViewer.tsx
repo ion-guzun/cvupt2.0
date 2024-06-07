@@ -6,7 +6,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
 ).toString();
-
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
@@ -17,32 +16,26 @@ interface PDFViewerProps {
 export const PDFViewer = ({ fileUrl }: PDFViewerProps) => {
   const [numPages, setNumPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const scale = 1.25;  
+  const scale = 1.5;
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setNumPages(numPages);
   };
 
-  const goToNextPage = () => setPageNumber(prevPageNumber => prevPageNumber + 1);
-  const goToPreviousPage = () => setPageNumber(prevPageNumber => prevPageNumber - 1);
+
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center p-4 border border-gray-200 shadow-sm rounded-md">
       <Document
         file={fileUrl}
         onLoadSuccess={onDocumentLoadSuccess}
       >
-        <Page pageNumber={pageNumber} scale={scale} renderTextLayer={true} />
+        <Page 
+          pageNumber={pageNumber} 
+          scale={scale} 
+          renderTextLayer={true} 
+        />
       </Document>
-      <div>
-        <p>Page {pageNumber} of {numPages}</p>
-        <button onClick={goToPreviousPage} disabled={pageNumber <= 1}>
-          Previous
-        </button>
-        <button onClick={goToNextPage} disabled={pageNumber >= (numPages || 0)}>
-          Next
-        </button>
-      </div>
     </div>
   );
 };

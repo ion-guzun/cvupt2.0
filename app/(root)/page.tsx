@@ -61,11 +61,11 @@ const Home = async () => {
 //----------------------------------COURSE TEMPLATE---------------------------------------
   let initialItems: Item[] = [
     { id: 1, title: "Item 1", subItems: [
-        { id: 1.1, title: "Subitem1.1", content: { title: "PDF Links", body: "" } },
+        { id: 1.1, title: "Subitem1.1", content: { title: "Subitem 1.2", body: "" } },
         { id: 1.2, title: "Subitem 1.2", content: { title: "Subitem 1.2", body: "" } },
     ] },
     { id: 2, title: "Item 2", subItems: [
-        { id: 2.1, title: "Subitem2.1", content: { title: "PDF Links", body: "" } },
+        { id: 2.1, title: "Subitem2.1", content: { title: "Subitem 1.2", body: "" } },
         { id: 2.2, title: "Subitem 2.2", content: { title: "Subitem 2.2", body: "" } },
     ] }
 ];
@@ -78,7 +78,7 @@ initialItems = relevantCourses.map((course, index) => ({
       { 
           id: index + 1.1, 
           title: "Courses", 
-          content: { title: "PDF Links", body: course.pdfs?.join("\n") || "No PDFs available" }
+          content: { title: `Courses for: ${course.name}`, body: course.pdfs?.join("\n") || "No PDFs available" }
       },
       // Add other subitems as needed
   ]
