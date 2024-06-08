@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-import { PDFViewer } from './PDFViewer';
 
 export const MainContent: React.FC<MainContentProps> = ({ content }) => (
   <div className="ml-64 p-8 overflow-y-auto h-full">
@@ -20,7 +19,14 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => (
               {`COURSE ${i + 1}`}
             </AccordionTrigger>
             <AccordionContent className="min-h-[150px]">
-              <PDFViewer fileUrl={link.trim()}/>
+              <iframe
+                src={link.trim()}
+                width="100%"
+                height="500px"
+                style={{ border: 'none' }}
+              >
+              This browser does not support PDFs. Please download the PDF to view it: <a href="https://utfs.io/f/6f648b47-3f29-4223-812d-806c17bc3749-41ftwr.pdf">Download PDF</a>.
+            </iframe>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
