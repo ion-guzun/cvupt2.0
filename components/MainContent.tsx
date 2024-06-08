@@ -19,7 +19,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => (
               {`COURSE ${i + 1}`}
             </AccordionTrigger>
             <AccordionContent className="min-h-[150px]">
-              <PDFViewer fileUrl={link.trim()}/>
+              <PDFViewer fileUrl={link.trim()}/>  {/*try again :(((((*/}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

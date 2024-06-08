@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -23,9 +22,8 @@ export const PDFViewer = ({ fileUrl }: PDFViewerProps) => {
   };
 
 
-
   return (
-    <div className="flex flex-col items-center justify-center p-4 border border-gray-200 shadow-sm rounded-md">
+    <div className="flex flex-col items-center justify-center p-4 border border-gray-200 shadow-sm rounded-md"> 
       <Document
         file={fileUrl}
         onLoadSuccess={onDocumentLoadSuccess}
