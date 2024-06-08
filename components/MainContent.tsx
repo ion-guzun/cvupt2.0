@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+
 import { PDFViewer } from './PDFViewer';
 
 export const MainContent: React.FC<MainContentProps> = ({ content }) => (
@@ -19,7 +20,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => (
               {`COURSE ${i + 1}`}
             </AccordionTrigger>
             <AccordionContent className="min-h-[150px]">
-              <PDFViewer fileUrl={link.trim()}/>  {/*try again :(((((*/}
+              <PDFViewer fileUrl={link.trim()}/>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
