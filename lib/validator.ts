@@ -25,3 +25,17 @@ export const initialValues = {
     startDate: new Date(),
     endDate: new Date()
 }
+
+export const labFormSchema = z.object({
+    name: z.string().min(2, {
+      message: "name of the lab must be at least 2 characters.",
+    }),
+    labPdfUrls: z.string().url().array()
+})
+
+export const labInitialValues = {
+    name: '',
+    labPdfUrls: []
+}
+
+

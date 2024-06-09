@@ -2,6 +2,7 @@
 export interface Content {
     title: string;
     body: string;
+    courseObjectId?: string //just for maintaining the course _id
   }
   
   export interface SubItem {
@@ -30,5 +31,13 @@ export interface Content {
     major: string
     year: number | null
   }
+
+  export type SearchParamProps = {
+    params: { _id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  }
+
+export type CourseRef = string;
+
 
   

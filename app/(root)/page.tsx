@@ -1,7 +1,7 @@
 import React, { use } from "react";
 import { Header } from "@/components/Header";
 import ContentManager from "@/components/ContentManager";
-import { Item } from "@/types";
+import { CourseRef, Item } from "@/types";
 import { getUserObjectId, isStudent, isTeacher, isUnauthorized } from "@/helpers";
 import { auth } from "@clerk/nextjs/server";
 import { ICourse } from "@/lib/database/models/course.model";
@@ -9,6 +9,7 @@ import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/cours
 import { currentStudent } from "@/lib/actions/student.actions";
 import { IStudent } from "@/lib/database/models/student.model";
 import { currentTeacher } from "@/lib/actions/teacher.actions";
+import { ILab } from "@/lib/database/models/lab.model";
 
 
 // const initialItems: Item[] = [
@@ -35,7 +36,7 @@ import { currentTeacher } from "@/lib/actions/teacher.actions";
 const Home = async () => {  
 
   let relevantCourses: ICourse[] = [];
-  // let coursesNames: string[] = [];
+  
 
   if(isStudent()) {
     //----------------GETTING THE COURSES THAT THE STUDENT IS ENROLLED IN-------------
@@ -43,18 +44,23 @@ const Home = async () => {
     const {major, year} = student;
     relevantCourses = await getStudentCourses(major, year);
     //----------------GETTING THE COURSES THAT THE STUDENT IS ENROLLED IN-------------
-    // for(const course of relevantCourses) {
-    //   coursesNames.push(course.name);
-    // }
+
+
+    //----------------GETTING THE LABS FOR EACH COURSE THAT THE STUDENT IS ENROLLED IN
+
+
+
+    //----------------GETTING THE LABS FOR EACH COURSE THAT THE STUDENT IS ENROLLED IN
+
+
+
     
   }
   else if(isTeacher()) {
     //----------------GETTING THE COURSES THAT THE TEACHER HAS CREATED-------------
     relevantCourses = await getTeacherCreatedCourses();
     //----------------GETTING THE COURSES THAT THE TEACHER HAS CREATED-------------
-    // for(const course of relevantCourses) {
-    //   coursesNames.push(course.name);
-    // }
+
 
   }
 
@@ -72,6 +78,11 @@ const Home = async () => {
 ];
 //--------------------------------COURSE TEMPLATE------------------------------------------
 
+function mockLabPDFs(index: number) {
+  const baseLink = "http://example.com/pdf/lab";
+  return Array.from({ length: 3 }, (_, i) => `${baseLink}${index + 1}_${i + 1}.pdf`).join("\n");
+}
+
 initialItems = relevantCourses.map((course, index) => ({
   id: index + 1, 
   title: course.name,
@@ -79,8 +90,21 @@ initialItems = relevantCourses.map((course, index) => ({
       { 
           id: index + 1.1, 
           title: "Courses", 
-          content: { title: `Courses for: ${course.name}`, body: course.pdfs?.join("\n") || "No PDFs available" }
+          content: { 
+            title: `Courses for: ${course.name}`, 
+            body: course.pdfs?.join("\n") || "No PDFs available" 
+          }
       },
+      {
+        id: index + 1.2,
+        title: "Labs",
+        content: {
+          title: `Labs for course with id: ${course._id} (${course.name})`,
+           body: mockLabPDFs(index),
+           courseObjectId: course._id
+          }
+      }
+      
       // Add other subitems as needed
   ]
 }));

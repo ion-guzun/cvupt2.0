@@ -39,7 +39,7 @@ export const CourseSchema = new Schema({
     pdfs: {type: [String], required: true},
     photo: {type: String, required: true},
     startDate: {type: Date, default: Date.now()},
-    endDate: {type: Date, default: Date.now()}
+    endDate: {type: Date, default: Date.now()},
 })
 
 const Course = models.Course || model('Course', CourseSchema);
