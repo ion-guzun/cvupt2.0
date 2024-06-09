@@ -1,117 +1,61 @@
-import React, { use } from "react";
+import React from "react";
 import { Header } from "@/components/Header";
 import ContentManager from "@/components/ContentManager";
-import { CourseRef, Item } from "@/types";
-import { getUserObjectId, isStudent, isTeacher, isUnauthorized } from "@/helpers";
-import { auth } from "@clerk/nextjs/server";
 import { ICourse } from "@/lib/database/models/course.model";
-import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/course.actions";
-import { currentStudent } from "@/lib/actions/student.actions";
 import { IStudent } from "@/lib/database/models/student.model";
-import { currentTeacher } from "@/lib/actions/teacher.actions";
 import { ILab } from "@/lib/database/models/lab.model";
-
-
-// const initialItems: Item[] = [
-//   {
-//     id: 1,
-//     title: "Item 1",
-//     subItems: [
-//       { id: 1.1, title: "Subitem 1.1", content: { title: "Subitem 1.1", body: "This is the content for Subitem 1.1. Lorem ipsum dolor sit amet, consectetur adipiscing elit." } },
-//       { id: 1.2, title: "Subitem 1.2", content: { title: "Subitem 1.2", body: "This is the content for Subitem 1.2. Lorem ipsum dolor sit amet, consectetur adipiscing elit." } },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Item 2",
-//     subItems: [
-//       { id: 2.1, title: "Subitem 2.1", content: { title: "Subitem 2.1", body: "This is the content for Subitem 2.1. Lorem ipsum dolor sit amet, consectetur adipiscing elit." } },
-//       { id: 2.2, title: "Subitem 2.2", content: { title: "Subitem 2.2", body: "This is the content for Subitem 2.2. Lorem ipsum dolor sit amet, consectetur adipiscing elit." } },
-//     ],
-//   },
-// ];
-
-// const initialSelectedContent = initialItems[0].subItems[0].content;
+import { isStudent, isTeacher } from "@/helpers";
+import { auth } from "@clerk/nextjs/server";
+import { currentStudent } from "@/lib/actions/student.actions";
+import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/course.actions";
+import { getLabsByCourse } from "@/lib/actions/lab.actions";
 
 const Home = async () => {  
-
   let relevantCourses: ICourse[] = [];
+  let relevantLabsWithCourseRefs = new Map<string, ILab[]>();
   
-
   if(isStudent()) {
-    //----------------GETTING THE COURSES THAT THE STUDENT IS ENROLLED IN-------------
     const student: IStudent = await currentStudent();
     const {major, year} = student;
     relevantCourses = await getStudentCourses(major, year);
-    //----------------GETTING THE COURSES THAT THE STUDENT IS ENROLLED IN-------------
 
-
-    //----------------GETTING THE LABS FOR EACH COURSE THAT THE STUDENT IS ENROLLED IN
-
-
-
-    //----------------GETTING THE LABS FOR EACH COURSE THAT THE STUDENT IS ENROLLED IN
-
-
-
-    
+    for (const course of relevantCourses) {
+      const labs = await getLabsByCourse(course._id) as ILab[];
+      relevantLabsWithCourseRefs.set(course._id, labs);
+    }
   }
   else if(isTeacher()) {
-    //----------------GETTING THE COURSES THAT THE TEACHER HAS CREATED-------------
     relevantCourses = await getTeacherCreatedCourses();
-    //----------------GETTING THE COURSES THAT THE TEACHER HAS CREATED-------------
-
-
   }
 
-  
-//----------------------------------COURSE TEMPLATE---------------------------------------
-  let initialItems: Item[] = [
-    { id: 1, title: "Item 1", subItems: [
-        { id: 1.1, title: "Subitem1.1", content: { title: "Subitem 1.2", body: "" } },
-        { id: 1.2, title: "Subitem 1.2", content: { title: "Subitem 1.2", body: "" } },
-    ] },
-    { id: 2, title: "Item 2", subItems: [
-        { id: 2.1, title: "Subitem2.1", content: { title: "Subitem 1.2", body: "" } },
-        { id: 2.2, title: "Subitem 2.2", content: { title: "Subitem 2.2", body: "" } },
-    ] }
-];
-//--------------------------------COURSE TEMPLATE------------------------------------------
-
-function mockLabPDFs(index: number) {
-  const baseLink = "http://example.com/pdf/lab";
-  return Array.from({ length: 3 }, (_, i) => `${baseLink}${index + 1}_${i + 1}.pdf`).join("\n");
-}
-
-initialItems = relevantCourses.map((course, index) => ({
-  id: index + 1, 
-  title: course.name,
-  subItems: [
+  let initialItems = relevantCourses.map((course, index) => ({
+    id: index + 1, 
+    title: course.name,
+    subItems: [
       { 
-          id: index + 1.1, 
-          title: "Courses", 
-          content: { 
-            title: `Courses for: ${course.name}`, 
-            body: course.pdfs?.join("\n") || "No PDFs available" 
-          }
+        id: index + 1.1, 
+        title: "Courses", 
+        content: { 
+          title: `Courses for: ${course.name}`, 
+          body: course.pdfs?.join("\n") || "No PDFs available" 
+        }
       },
       {
         id: index + 1.2,
         title: "Labs",
         content: {
           title: `Labs for course with id: ${course._id} (${course.name})`,
-           body: mockLabPDFs(index),
-           courseObjectId: course._id
-          }
+          body: relevantLabsWithCourseRefs.get(course._id)
+                ?.map(lab => lab.labPdfs.join('\n'))
+                .join('\n') ?? 'No PDFs available',
+          courseObjectId: course._id
+        }
       }
-      
-      // Add other subitems as needed
-  ]
-}));
+    ]
+  }));
 
+  const initialSelectedContent = initialItems[0]?.subItems[0]?.content;
 
-  const initialSelectedContent = initialItems[0].subItems[0].content;
-  
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -119,8 +63,5 @@ initialItems = relevantCourses.map((course, index) => ({
     </div>
   );
 };
-
-
-
 
 export default Home;

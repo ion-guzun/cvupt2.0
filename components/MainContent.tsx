@@ -23,7 +23,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
         <Button onClick={handleCreateLab} className="mb-4">Create New Lab</Button>
       )}
       <div>
-        {content.body.split('\n').map((link, i) => (
+        {content.body!.split('\n').map((link, i) => (
           <Accordion key={`accordion-${i}`} type="single" collapsible className="w-full">
             <AccordionItem value={`item-${i}`}>
               <AccordionTrigger className='min-w-[950px]'>

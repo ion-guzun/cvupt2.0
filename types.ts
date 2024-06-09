@@ -1,7 +1,7 @@
 // types.ts
 export interface Content {
     title: string;
-    body: string;
+    body: string | undefined;
     courseObjectId?: string //just for maintaining the course _id
   }
   
