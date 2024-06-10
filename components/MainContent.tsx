@@ -8,9 +8,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation'; 
+import { useUser } from '@clerk/nextjs';
 
 export const MainContent: React.FC<MainContentProps> = ({ content }) => {
-  const router = useRouter(); 
+  const router = useRouter();
+  const isTeacherEmail = useUser().user?.emailAddresses[0].emailAddress.endsWith('github@gmail.com'); 
+  
 
   const handleCreateLab = () => {
     router.push(`/teacher/create-lab-within-course/${content.courseObjectId}`); 
@@ -19,7 +22,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
   return (
     <div className="ml-64 p-8 overflow-y-auto h-full">
       <h1 className="text-2xl font-bold mb-4">{content.title}</h1>
-      {content.title.includes('Labs') && (
+      {content.title.includes('Labs') && isTeacherEmail && (
         <Button onClick={handleCreateLab} className="mb-4">Create New Lab</Button>
       )}
       <div>

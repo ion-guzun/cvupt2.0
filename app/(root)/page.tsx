@@ -5,7 +5,6 @@ import { ICourse } from "@/lib/database/models/course.model";
 import { IStudent } from "@/lib/database/models/student.model";
 import { ILab } from "@/lib/database/models/lab.model";
 import { isStudent, isTeacher } from "@/helpers";
-import { auth } from "@clerk/nextjs/server";
 import { currentStudent } from "@/lib/actions/student.actions";
 import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/course.actions";
 import { getLabsByCourse } from "@/lib/actions/lab.actions";
@@ -18,7 +17,6 @@ const Home = async () => {
     const student: IStudent = await currentStudent();
     const {major, year} = student;
     relevantCourses = await getStudentCourses(major, year);
-
     for (const course of relevantCourses) {
       const labs = await getLabsByCourse(course._id) as ILab[];
       relevantLabsWithCourseRefs.set(course._id, labs);
@@ -26,6 +24,10 @@ const Home = async () => {
   }
   else if(isTeacher()) {
     relevantCourses = await getTeacherCreatedCourses();
+    for (const course of relevantCourses) {
+      const labs = await getLabsByCourse(course._id) as ILab[];
+      relevantLabsWithCourseRefs.set(course._id, labs);
+    }
   }
 
   let initialItems = relevantCourses.map((course, index) => ({
