@@ -18,6 +18,16 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
   const handleCreateLab = () => {
     router.push(`/teacher/create-lab-within-course/${content.courseObjectId}`); 
   };
+  const handleCreateAssignment = () => {
+    router.push(`/teacher/create-assignment-within-course/${content.courseObjectId}`);
+  }
+
+  const getMaterialType = (title: string) => {
+    if (title.includes('Labs')) return 'Lab Material';
+    if (title.includes('Courses')) return 'Course Material';
+    if (title.includes('Assignments')) return 'Assignment';
+    return 'Material'; // Default case, just in case
+  };
 
   return (
     <div className="ml-64 p-8 overflow-y-auto h-full">
@@ -25,12 +35,15 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
       {content.title.includes('Labs') && isTeacherEmail && (
         <Button onClick={handleCreateLab} className="mb-4">Create New Lab</Button>
       )}
+      {content.title.includes('Assignments') && isTeacherEmail && (
+        <Button onClick={handleCreateAssignment} className="mb-4">Create New Assignment</Button>
+      )}
       <div>
         {content.body!.split('\n').map((link, i) => (
           <Accordion key={`accordion-${i}`} type="single" collapsible className="w-full">
             <AccordionItem value={`item-${i}`}>
               <AccordionTrigger className='min-w-[950px]'>
-                {content.title.includes('Courses') ? `Course Material ${i + 1}` : `Lab Material ${i + 1}`}
+                {`${getMaterialType(content.title)} ${i + 1}`}
               </AccordionTrigger>
               <AccordionContent className="min-h-[150px]">
                 <iframe

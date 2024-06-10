@@ -52,6 +52,14 @@ const Home = async () => {
                 .join('\n') ?? 'No PDFs available',
           courseObjectId: course._id
         }
+      },
+      {
+        id: index + 1.3,
+        title: "Assignments",
+        content: {
+          title: `Assignments for course with id: ${course._id} (${course.name})`,
+          body: '',
+        }
       }
     ]
   }));
