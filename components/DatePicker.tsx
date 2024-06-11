@@ -8,7 +8,7 @@ import { useState } from "react";
 
 type DatePickerProps = {
   onDateSelect: (date: Date | undefined) => void;
-  type: 'start' | 'end';
+  type: 'start' | 'end' | 'deadline';
 };
 
 export const DatePicker = ({ onDateSelect, type }: DatePickerProps) => {
@@ -19,18 +19,31 @@ export const DatePicker = ({ onDateSelect, type }: DatePickerProps) => {
     onDateSelect(newDate); // Call the callback to sync with the parent component
   };
 
+  const getPlaceholderText = () => {
+    switch (type) {
+      case 'start':
+        return 'Pick start date';
+      case 'end':
+        return 'Pick end date';
+      case 'deadline':
+        return 'Pick the deadline';
+      default:
+        return 'Pick date';
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal", // Changed class to w-full
+            "w-full justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick {type} date</span>}
+          {date ? format(date, "PPP") : <span>{getPlaceholderText()}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

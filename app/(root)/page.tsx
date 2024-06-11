@@ -8,13 +8,17 @@ import { isStudent, isTeacher } from "@/helpers";
 import { currentStudent } from "@/lib/actions/student.actions";
 import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/course.actions";
 import { getLabsByCourse } from "@/lib/actions/lab.actions";
+import { IAssignment } from "@/lib/database/models/assignment.model";
+import { getStudentAssignmentsByCourse } from "@/lib/actions/assignment.actions";
 
 type CourseRef = string;
 
 const Home = async () => {  
   let relevantCourses: ICourse[] = [];
   let relevantLabsWithCourseRefs = new Map<CourseRef, ILab[]>();
+  let relevantAssignmentsWithCourseRefs = new Map<CourseRef, IAssignment[]>
   
+
   if(isStudent()) {
     const student: IStudent = await currentStudent();
     const {major, year} = student;
@@ -24,10 +28,15 @@ const Home = async () => {
     relevantCourses = await getTeacherCreatedCourses();
   }
 
-  for (const course of relevantCourses) {
+  for (const course of relevantCourses) { //getting the labs and assignments for each course
     const labs = await getLabsByCourse(course._id) as ILab[];
+    const assignments = await getStudentAssignmentsByCourse(course._id) as IAssignment[];
+
     relevantLabsWithCourseRefs.set(course._id, labs);
+    relevantAssignmentsWithCourseRefs.set(course._id, assignments);
   }
+  
+  
 
   let initialItems = relevantCourses.map((course, index) => ({
     id: index + 1, 
@@ -57,7 +66,8 @@ const Home = async () => {
         title: "Assignments",
         content: {
           title: `Assignments for course with id: ${course._id} (${course.name})`,
-          body: '',
+          body: JSON.stringify(relevantAssignmentsWithCourseRefs.get(course._id) || []),
+          courseObjectId: course._id
         }
       }
     ]

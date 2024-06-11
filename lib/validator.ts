@@ -38,4 +38,20 @@ export const labInitialValues = {
     labPdfUrls: []
 }
 
+export const assignmentFormSchema = z.object({
+    title: z.string().min(2, {message: 'assigment title must be at least 2 characters'})
+                     .max(15, {message: 'assigment title must be at max 15 characters'}),
+    description: z.string().min(2, {message: 'assigment title must be at least 2 characters'})
+                     .max(400, {message: 'assigment title must be at max 400 characters'}),
+    deadline: z.date().min(currentDate),
+    maxGrade: z.string()
+})
+
+export const assignmentInitialValues = {
+    title: '',
+    description: '',
+    deadline: new Date(),
+    maxGrade: '',
+}
+
 

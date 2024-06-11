@@ -1,7 +1,9 @@
+import { IAssignment } from "./lib/database/models/assignment.model";
+
 // types.ts
 export interface Content {
     title: string;
-    body: string | undefined;
+    body: string | undefined
     courseObjectId?: string //just for maintaining the course _id
   }
   
