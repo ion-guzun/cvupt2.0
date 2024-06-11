@@ -37,7 +37,6 @@ export interface Content {
     searchParams: { [key: string]: string | string[] | undefined }
   }
 
-export type CourseRef = string;
 
 
   

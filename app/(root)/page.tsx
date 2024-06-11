@@ -9,25 +9,24 @@ import { currentStudent } from "@/lib/actions/student.actions";
 import { getStudentCourses, getTeacherCreatedCourses } from "@/lib/actions/course.actions";
 import { getLabsByCourse } from "@/lib/actions/lab.actions";
 
+type CourseRef = string;
+
 const Home = async () => {  
   let relevantCourses: ICourse[] = [];
-  let relevantLabsWithCourseRefs = new Map<string, ILab[]>();
+  let relevantLabsWithCourseRefs = new Map<CourseRef, ILab[]>();
   
   if(isStudent()) {
     const student: IStudent = await currentStudent();
     const {major, year} = student;
     relevantCourses = await getStudentCourses(major, year);
-    for (const course of relevantCourses) {
-      const labs = await getLabsByCourse(course._id) as ILab[];
-      relevantLabsWithCourseRefs.set(course._id, labs);
-    }
   }
   else if(isTeacher()) {
     relevantCourses = await getTeacherCreatedCourses();
-    for (const course of relevantCourses) {
-      const labs = await getLabsByCourse(course._id) as ILab[];
-      relevantLabsWithCourseRefs.set(course._id, labs);
-    }
+  }
+
+  for (const course of relevantCourses) {
+    const labs = await getLabsByCourse(course._id) as ILab[];
+    relevantLabsWithCourseRefs.set(course._id, labs);
   }
 
   let initialItems = relevantCourses.map((course, index) => ({
