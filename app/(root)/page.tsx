@@ -36,40 +36,38 @@ const Home = async () => {
     relevantAssignmentsWithCourseRefs.set(course._id, assignments);
   }
   
-  
+  console.log(relevantCourses.length);
 
   let initialItems = relevantCourses.map((course, index) => ({
-    id: index + 1, 
+    id: index + 1,
     title: course.name,
     subItems: [
-      { 
-        id: index + 1.1, 
-        title: "Courses", 
-        content: { 
-          title: `Courses for: ${course.name}`, 
-          body: course.pdfs?.join("\n") || "No PDFs available" 
+        { 
+            id: index + 1.1,
+            title: "Courses",
+            content: { 
+                title: `Courses for: ${course.name}`,
+                courses: [course]
+            }
+        },
+        {
+            id: index + 1.2,
+            title: "Labs",
+            content: {
+                title: `Labs for course: ${course.name}`,
+                labs: relevantLabsWithCourseRefs.get(course._id) || [],
+                courseObjectId: course._id
+            } 
+        },
+        {
+            id: index + 1.3,
+            title: "Assignments",
+            content: {
+                title: `Assignments for course: ${course.name}`,
+                assignments: relevantAssignmentsWithCourseRefs.get(course._id) || [],
+                courseObjectId: course._id
+            }
         }
-      },
-      {
-        id: index + 1.2,
-        title: "Labs",
-        content: {
-          title: `Labs for course with id: ${course._id} (${course.name})`,
-          body: relevantLabsWithCourseRefs.get(course._id)
-                ?.map(lab => lab.labPdfs.join('\n'))
-                .join('\n') ?? 'No PDFs available',
-          courseObjectId: course._id
-        }
-      },
-      {
-        id: index + 1.3,
-        title: "Assignments",
-        content: {
-          title: `Assignments for course with id: ${course._id} (${course.name})`,
-          body: JSON.stringify(relevantAssignmentsWithCourseRefs.get(course._id) || []),
-          courseObjectId: course._id
-        }
-      }
     ]
   }));
 

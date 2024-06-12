@@ -1,11 +1,16 @@
 import { IAssignment } from "./lib/database/models/assignment.model";
+import { ICourse } from "./lib/database/models/course.model";
+import { ILab } from "./lib/database/models/lab.model";
 
 // types.ts
 export interface Content {
-    title: string;
-    body: string | undefined
-    courseObjectId?: string //just for maintaining the course _id
-  }
+  title: string;
+  body?: string | undefined;
+  courses?: ICourse[]
+  labs?: ILab[]; // Include labs directly
+  assignments?: IAssignment[]; // Include assignments directly
+  courseObjectId?: string; // For maintaining the course _id
+}
   
   export interface SubItem {
     id: number;

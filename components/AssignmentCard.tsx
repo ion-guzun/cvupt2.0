@@ -7,6 +7,11 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from './ui/button';
+import Link from 'next/link';
+import { utapi } from '@/server/uploadthing';
+import { useRouter } from 'next/navigation';
+import { hasSubmitted } from '@/lib/actions/submission.actions';
 
 type AssignmentCardProps = {
     createdBy: string;
@@ -20,7 +25,9 @@ const formatDate = (date: Date): string => {
     return new Date(date).toLocaleString();
 };
 
-export const AssignmentCard = ({ createdBy, title, description, deadline, createdAt }: AssignmentCardProps) => {
+
+export const AssignmentCard =  ({ createdBy, title, description, deadline, createdAt }: AssignmentCardProps) => {
+    
     return (
         <Card className="m-4">
             <CardHeader>
@@ -34,6 +41,9 @@ export const AssignmentCard = ({ createdBy, title, description, deadline, create
             </CardContent>
             <CardFooter className="flex justify-between">
                 <p>Deadline: {formatDate(deadline)}</p>
+                <Link href='/student/submit-assignment'>
+                    <Button>Submit</Button>
+                </Link>
                 <p className="text-right text-sm text-gray-500">
                     Created at: {formatDate(createdAt)}
                 </p>
