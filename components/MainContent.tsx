@@ -69,20 +69,18 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
                       </AccordionItem>
                   </Accordion>
               ))}
-              {content.courses?.map((course, i) => (
-                  <Accordion key={`accordion-course-${i}`} type="single" collapsible className="w-full">
-                      <AccordionItem value={`item-${i}`}>
-                          <AccordionTrigger className='min-w-[950px]'>
-                              {`Course Material ${i + 1}`}
-                          </AccordionTrigger>
-                          <AccordionContent className="min-h-[150px]">
-                            {course.pdfs?.map((pdf, idx) => (
-                              <iframe key={idx} src={pdf} width="100%" height="500px" style={{ border: 'none' }} />
-                            ))}
-                          </AccordionContent>
-                      </AccordionItem>
-                  </Accordion>
-              ))}
+              {content.courses?.flatMap((course, i) => course.pdfs!.map((pdf, idx) => (
+                <Accordion key={`accordion-course-${i}-${idx}`} type="single" collapsible className="w-full">
+                    <AccordionItem value={`item-${i}-${idx}`}>
+                        <AccordionTrigger className='min-w-[950px]'>
+                            {`Course Material ${idx + 1}`}
+                        </AccordionTrigger>
+                        <AccordionContent className="min-h-[150px]">
+                            <iframe key={idx} src={pdf} width="100%" height="500px" style={{ border: 'none' }} />
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+               )))}
           </div>
       </div>
   );
