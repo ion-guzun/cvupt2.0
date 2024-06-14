@@ -36,7 +36,6 @@ const Home = async () => {
     relevantAssignmentsWithCourseRefs.set(course._id, assignments);
   }
   
-  console.log(relevantCourses.length);
 
   let initialItems = relevantCourses.map((course, index) => ({
     id: index + 1,

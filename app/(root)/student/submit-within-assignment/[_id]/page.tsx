@@ -7,20 +7,21 @@ import { Separator } from "@/components/ui/separator"
 import { uploadFiles } from "@/lib/actions/submission.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { SearchParamProps } from "@/types";
 
 
-const submitAssignmentForm = () => {
+const submitAssignmentForm = ({params: {_id}}: SearchParamProps) => {
   const router = useRouter();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
       <form 
         action={async (formData: FormData) => {
-          const result = await uploadFiles(formData);
+          const result = await uploadFiles(formData, _id);
           const message = result?.message ?? "An error occurred";
           toast({
             title: message,
-            duration: 5000
+            duration: 3000
           });
           if (result?.success) {
             router.push('/');

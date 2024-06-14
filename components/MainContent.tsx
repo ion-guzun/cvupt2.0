@@ -39,6 +39,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
                           </AccordionTrigger>
                           <AccordionContent className="min-h-[150px]">
                               <AssignmentCard 
+                                assignmentObjectId={assignment._id}
                                 createdBy={assignment.createdBy}
                                 title={assignment.title}
                                 description={assignment.description}

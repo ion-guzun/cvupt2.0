@@ -17,13 +17,13 @@ export async function createStudentSubmition(submission: ISubmission) {
     }
 }
 
-export async function uploadFiles(formData: FormData) {
+export async function uploadFiles(formData: FormData, assignmentRef: string) {
     const files = formData.getAll("files");
     //@ts-ignore
     const response = await utapi.uploadFiles(files);
     if (response) {
         const submission: ISubmission = {
-            // assignmentRef: '',
+            assignmentRef: assignmentRef,
             studentRef: getUserObjectId(),
             submittedFileUrl: response[0].data?.url!,
             status: 'Submitted'
@@ -55,28 +55,22 @@ export async function getSubmissionsByAssignment(assignmentRef: string) {
 
         const submissions = await Submission.find({assignmentRef});
         return JSON.parse(JSON.stringify(submissions));
+        
     } catch (error) {
         console.log(error);
     }
 }
 
-export async function hasSubmitted() {
+export async function getSubmissionById(submissionRef: string) {
     try {
         await connectToDatabase();
 
-        const allSubmissions: ISubmission[] = await Submission.find();
-        const student: IStudent | null = await Student.findById(getUserObjectId());
-
-        const allSubmissionsObjectIds: string[] = [];
-        for(const submission of allSubmissions) {
-            allSubmissionsObjectIds.push(submission._id!);
-        }
-
-        if(allSubmissionsObjectIds.find(submissionId => submissionId === student?._id)) {
-            return true;
-        } return false;
-
+        const submission = await Submission.findById(submissionRef);
+        return JSON.parse(JSON.stringify(submission));
     } catch (error) {
         console.log(error);
     }
 }
+
+
+

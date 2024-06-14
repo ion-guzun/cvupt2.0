@@ -22,3 +22,14 @@ export async function getStudentAssignmentsByCourse(courseRef: string) {
         console.log(error);
     }
 }
+
+export async function isAssignmentGraded(assignmentRef: string) {
+    try {
+        await connectToDatabase();
+
+        const assignment: IAssignment | null = await Assignment.findById(assignmentRef);
+        
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -55,3 +55,14 @@ export const assignmentInitialValues = {
 }
 
 
+export const TeacherSubmissionFeedbackFormSchema = z.object({
+    feedback: z.string().min(2, {message: 'feedback must be at least 2 characters'})
+    .max(15, {message: 'feedback must be at max 15 characters'}),
+    grade: z.string()
+})
+
+export const teacherFeedbackInitialValues = {
+    feedback: '',
+    grade: ''
+}
+

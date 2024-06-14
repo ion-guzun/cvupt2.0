@@ -44,6 +44,9 @@ export interface Content {
     searchParams: { [key: string]: string | string[] | undefined }
   }
 
-
+export type TeacherFeedback = {
+  feedback: string
+  grade: string
+}
 
   

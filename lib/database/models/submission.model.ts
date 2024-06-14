@@ -5,10 +5,12 @@ export interface ISubmission {
     _id?: string
     assignmentRef?: string
     studentRef?: string
-    submittedFileUrl: string
+    submittedFileUrl?: string
     grade?: number
     submittedTime?: Date
     status?: string
+    teacherFeedbackText?: string
+    gradedTime?: Date
 }
 
 export const SubmissionSchema = new Schema({
@@ -21,7 +23,9 @@ export const SubmissionSchema = new Schema({
         type: String, 
         enum: ['Submitted', 'Not Submitted', 'Graded'], 
         default: 'Not Submitted'
-    }
+    },
+    teacherFeedbackText: {type: String, default: ''},
+    gradedTime: {type: Date, default: Date.now()}
 })
 
 const Submission = models.Submission || model('Submission', SubmissionSchema);
