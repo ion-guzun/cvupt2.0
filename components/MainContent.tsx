@@ -28,9 +28,7 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
     router.push(`/teacher/create-quiz-within-course/${content.courseObjectId}`);
   };
 
-  // Check if content is undefined or null
   if (!content) {
-    // Render some default content or return null
     return <div>No content available.</div>;
   }
 
@@ -95,23 +93,31 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
             </AccordionItem>
           </Accordion>
         ))}
-        {content.courses?.flatMap((course, i) => course.pdfs!.map((pdf, idx) => (
-          <div key={`course-pdf-${i}-${idx}`}>
-            <Accordion key={`accordion-course-${i}-${idx}`} type="single" collapsible className="w-full">
-              <AccordionItem value={`item-${i}-${idx}`}>
-                <AccordionTrigger className='min-w-[950px]'>
-                  {`Course Material ${idx + 1}`}
-                </AccordionTrigger>
-                <AccordionContent className="min-h-[150px]">
-                  <Link href={course.pdfs![idx]} target="_blank" rel="noopener noreferrer">
-                    <Button>View in full screen</Button>
-                  </Link>
-                  <iframe key={idx} src={pdf} width="100%" height="500px" style={{ border: 'none' }} className='py-4'/>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+        
+        {content.courses?.map((course, i) => (
+          <div key={`course-${i}`}>
+            {isTeacherEmail && (
+              <Link href={`teacher/action-buttons-for-course/${course._id}`}>
+                <Button className='bg-red-600 hover:bg-red-700'>Course actions</Button>
+              </Link>
+            )}
+            {course.pdfs?.map((pdf, idx) => (
+              <Accordion key={`accordion-course-${i}-${idx}`} type="single" collapsible className="w-full">
+                <AccordionItem value={`item-${i}-${idx}`}>
+                  <AccordionTrigger className='min-w-[950px]'>
+                    {`Course Material ${idx + 1}`}
+                  </AccordionTrigger>
+                  <AccordionContent className="min-h-[150px]">
+                    <Link href={pdf} target="_blank" rel="noopener noreferrer">
+                      <Button>View in full screen</Button>
+                    </Link>
+                    <iframe key={idx} src={pdf} width="100%" height="500px" style={{ border: 'none' }} className='py-4'/>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            ))}
           </div>
-        )))}
+        ))}
         {content.quizes?.map((quiz, i) => (
           <Accordion key={`accordion-quiz-${i}`} type="single" collapsible className="w-full">
             <AccordionItem value={`item-${i}`}>
@@ -131,7 +137,6 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
             </AccordionItem>
           </Accordion>
         ))}
-        
       </div>
     </div>
   );

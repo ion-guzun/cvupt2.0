@@ -7,7 +7,7 @@ const CreateCourse = () => {
   return (
     <div>
       <Link href='/'>
-        <Button className="px-2 py-2">
+        <Button className="mx-4 mt-4">
           Back to dasboard
         </Button>
       </Link>

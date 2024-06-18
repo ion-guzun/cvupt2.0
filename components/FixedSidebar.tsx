@@ -64,14 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ items, onSelectItem }) => {
                         alt=''
                       />
                     )}
-                    {subItem.title === "Settings" && (
-                      <Image
-                        src='/settings.svg'
-                        width={32}
-                        height={32}
-                        alt=''
-                      />
-                    )}
+                    
                   </div>
                   <span className="flex-grow pl-2">{subItem.title}</span>
                 </button>

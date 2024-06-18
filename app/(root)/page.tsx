@@ -97,14 +97,6 @@ const Home = async () => {
               courseObjectId: course._id
           }
         },
-        {
-          id: index + 1.5,
-          title: "Settings",
-          content: {
-              title: `Settings for course: ${course.name}`,
-              courseObjectId: course._id
-          }
-        }
     ]
   }));
 

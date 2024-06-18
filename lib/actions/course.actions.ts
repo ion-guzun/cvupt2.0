@@ -8,7 +8,8 @@ import Teacher, { ITeacher, TeacherSchema } from "../database/models/teacher.mod
 import mongoose from "mongoose";
 import Lab from "../database/models/lab.model";
 import Assignment from "../database/models/assignment.model";
-import { Quiz } from "../database/models/quiz.models";
+import { Quiz, QuizFeedback } from "../database/models/quiz.models";
+import Submission from "../database/models/submission.model";
 
 export async function createCourse(course: CreateCourseParams) {
     try {
@@ -113,12 +114,25 @@ export async function deleteCourseById(courseRef: string) {
 
       await Lab.deleteMany({courseRef});
       await Assignment.deleteMany({courseRef});
+    //   await Submission.deleteMany({})     //overkill for now
       await Quiz.deleteMany({courseRef});
-
+    //   await QuizFeedback.deleteMany({})   //overkill for now
 
       return JSON.parse(JSON.stringify(deletedCourse));
     } catch (error) {
       console.error("Error deleting course:", error);
       throw error; 
     }
-  }
+}
+
+export async function getCourseById(courseRef: string) {
+    try {
+        await connectToDatabase();
+
+        const course = await Course.findById(courseRef);
+        return JSON.parse(JSON.stringify(course));
+
+    } catch (error) {
+        console.log(error);
+    }
+}

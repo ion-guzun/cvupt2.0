@@ -9,15 +9,26 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { useRouter } from 'next/navigation'; 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type QuizCardProps = {
-  title: string
-  description: string
-  questionCount: number
-  timeLimit: number
-  userEmail: string
-  quizId: string
-}
+  title: string;
+  description: string;
+  questionCount: number;
+  timeLimit: number;
+  userEmail: string;
+  quizId: string;
+};
 
 const QuizCard: React.FC<QuizCardProps> = ({
   title,
@@ -48,9 +59,29 @@ const QuizCard: React.FC<QuizCardProps> = ({
         <p>{`Time Limit: ${timeLimit} minutes`}</p>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleAction} className={`btn ${userEmail.endsWith('@student.upt.ro') ? 'btn-success' : 'btn-primary'}`}>
-          {userEmail.endsWith('@student.upt.ro') ? 'Begin Quiz' : 'View Results'}
-        </Button>
+        {userEmail.endsWith('@student.upt.ro') ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="btn btn-success">Begin Exam</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Start Exam</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to start the quiz? Once started, you cannot go back.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleAction}>Start Exam</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ) : (
+          <Button onClick={handleAction} className="btn btn-primary">
+            View Results
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

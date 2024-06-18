@@ -3,14 +3,24 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import { uploadFiles } from "@/lib/actions/submission.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { SearchParamProps } from "@/types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-
-const submitAssignmentForm = ({params: {_id}}: SearchParamProps) => {
+const submitAssignmentForm = ({ params: { _id } }: SearchParamProps) => {
   const router = useRouter();
 
   return (
@@ -44,11 +54,25 @@ const submitAssignmentForm = ({params: {_id}}: SearchParamProps) => {
           />
         </div>
         <div className="flex space-x-4">
-          <Button type="submit" className="w-40 bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded">
-            <h1 className="text-gray-700 rounded-md">
-              Upload
-            </h1>
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="w-40 bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded">
+                <h1 className="text-gray-700 rounded-md">Upload</h1>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Confirm Upload</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to upload these files? Make sure all your files are placed in a zip folder before uploading.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction type="submit">Upload</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Link href='/'>
             <Button className="w-40 bg-gray-600">Back to dashboard</Button>
           </Link>
