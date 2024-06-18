@@ -7,6 +7,7 @@ import { Schema, model, models } from "mongoose";
 
 export interface ILab {
     _id?: string
+    description: string
     name: string
     courseRef: string
     teachers: string[]
@@ -15,6 +16,7 @@ export interface ILab {
 
 export const LabSchema = new Schema({
     name: {type: String, required: true},
+    description: {type: String, required: true, default: ''},
     courseRef: {type: Schema.Types.ObjectId, ref: 'Course'},
     teachers: [{type: Schema.Types.ObjectId, ref: 'Teacher'}],
     labPdfs: {type: [String], required: true}

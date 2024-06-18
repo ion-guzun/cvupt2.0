@@ -1,4 +1,6 @@
 import { Schema, model, models } from "mongoose";
+import { IStudent } from "./student.model";
+import { ITeacher } from "./teacher.model";
 
 export type CreateCourseParams = {
     name: string
@@ -22,6 +24,21 @@ export interface ICourse {
     forYear: number
     forSemester: number
     studentsEnrolledIn: string[]
+    pdfs?: string[]
+    photo: string
+    startDate: Date
+    endDate: Date
+}
+
+export interface ICoursePopulated {
+    _id: string
+    name: string
+    createdBy: ITeacher
+    forFaculty: string
+    forMajor: string
+    forYear: number
+    forSemester: number
+    studentsEnrolledIn: IStudent[]
     pdfs?: string[]
     photo: string
     startDate: Date

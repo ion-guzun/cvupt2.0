@@ -5,7 +5,7 @@ export interface ITeacher extends IUser {
     coursesCreated: string[]
 }
 
-const TeacherSchema = new Schema({
+export const TeacherSchema = new Schema({
     ...UserSchema.obj,
     coursesCreated: [{type: Schema.Types.ObjectId, ref: 'Course'}]
 })

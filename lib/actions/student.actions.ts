@@ -69,6 +69,17 @@ export async function currentStudent() {
   }
 }
 
+export async function getStudentById(studentRef: string) {
+  try {
+    await connectToDatabase();
+
+    const stud = await Student.findById(studentRef);
+    return JSON.parse(JSON.stringify(stud));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 
 

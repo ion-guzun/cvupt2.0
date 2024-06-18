@@ -1,15 +1,21 @@
+import { Schema } from "mongoose";
 import { IAssignment } from "./lib/database/models/assignment.model";
 import { ICourse } from "./lib/database/models/course.model";
 import { ILab } from "./lib/database/models/lab.model";
+import { IStudent } from "./lib/database/models/student.model";
+import { ITeacher } from "./lib/database/models/teacher.model";
+import { IQuiz } from "./lib/database/models/quiz.models";
 
 // types.ts
 export interface Content {
   title: string;
   body?: string | undefined;
   courses?: ICourse[]
-  labs?: ILab[]; // Include labs directly
-  assignments?: IAssignment[]; // Include assignments directly
-  courseObjectId?: string; // For maintaining the course _id
+  labs?: ILab[]; 
+  assignments?: IAssignment[]; 
+  quizes?: IQuiz[];
+  actionButtons?: React.ReactNode[]
+  courseObjectId?: string;
 }
   
   export interface SubItem {

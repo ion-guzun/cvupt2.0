@@ -34,23 +34,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ items, onSelectItem }) => {
                   <div className="flex-grow-0">
                     {subItem.title === "Courses" && (
                       <Image
-                        src='https://img.icons8.com/3d-fluency/94/classroom.png'
-                        width={30}
-                        height={30}
+                        src='graduation.svg'
+                        width={32}
+                        height={32}
                         alt=''
                       />
                     )}
                     {subItem.title === "Labs" && (
                       <Image
-                        src='https://img.icons8.com/isometric/50/test-tube.png'
-                        width={30}
-                        height={30}
+                        src='/laboratory.svg'
+                        width={32}
+                        height={32}
                         alt=''
                       />
                     )}
                     {subItem.title === "Assignments" && (
                       <Image
-                        src='https://img.icons8.com/isometric/50/clipboard.png'
+                        src='/assignment.svg'
+                        width={32}
+                        height={32}
+                        alt=''
+                      />
+                    )}
+                    {subItem.title === "Exams" && (
+                      <Image
+                        src='/exam.svg'
+                        width={32}
+                        height={32}
+                        alt=''
+                      />
+                    )}
+                    {subItem.title === "Settings" && (
+                      <Image
+                        src='/settings.svg'
                         width={32}
                         height={32}
                         alt=''

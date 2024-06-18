@@ -5,6 +5,7 @@ import Teacher from "../database/models/teacher.model";
 import { CreateUserParams } from "../database/models/user.model";
 import Submission, { ISubmission } from "../database/models/submission.model";
 import { TeacherFeedback } from "@/types";
+import Course from "../database/models/course.model";
 
 export async function createTeacher(teacher: CreateUserParams) {
     try {
@@ -65,6 +66,8 @@ export async function isFeedbacked(submissionRef: string) {
     console.log(error);
   }
 }
+
+
 
 
 
