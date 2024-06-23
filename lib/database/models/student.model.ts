@@ -9,6 +9,7 @@ export interface IStudent extends IUser {
 }
 
 
+
 export const StudentSchema = new Schema({
     ...UserSchema.obj,
     faculty: {type: String, default: ''},

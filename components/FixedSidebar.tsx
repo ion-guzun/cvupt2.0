@@ -64,6 +64,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ items, onSelectItem }) => {
                         alt=''
                       />
                     )}
+                    {subItem.title === "Students" && (
+                      <div className="relative" style={{ width: '32px', height: '32px' }}>
+                      <Image
+                        src='/user-girl.svg'
+                        width={32}
+                        height={32}
+                        alt=''
+                        className="absolute left-3"
+                      />
+                      <Image
+                        src='/user-boy.svg'
+                        width={32}
+                        height={32}
+                        alt=''
+                        className="absolute"
+                      />
+                    </div>
+                    )}
+                    {subItem.title === "Teachers" && (
+                      <Image
+                        src='/teacher.svg'
+                        width={32}
+                        height={32}
+                        alt=''
+                      />
+                    )}
                     
                   </div>
                   <span className="flex-grow pl-2">{subItem.title}</span>

@@ -5,7 +5,7 @@ import { ICourse, ICoursePopulated } from "@/lib/database/models/course.model";
 import { IStudent } from "@/lib/database/models/student.model";
 import { ILab } from "@/lib/database/models/lab.model";
 import { getUserObjectId, isStudent, isTeacher } from "@/helpers";
-import { currentStudent, enrollStudentInCourse } from "@/lib/actions/student.actions";
+import { currentStudent, enrollStudentInCourse, getAllStudentsByCourse } from "@/lib/actions/student.actions";
 import { deleteCourseById, getStudentCourses, getTeacherCreatedCourses, populateCourses, populateSingleCourse } from "@/lib/actions/course.actions";
 import { getLabsByCourse } from "@/lib/actions/lab.actions";
 import { IAssignment } from "@/lib/database/models/assignment.model";
@@ -14,6 +14,8 @@ import { Schema } from "mongoose";
 import { IQuiz } from "@/lib/database/models/quiz.models";
 import { getAllQuizesByCourse } from "@/lib/actions/quiz.actions";
 import { Button } from "@/components/ui/button";
+import { ITeacher } from "@/lib/database/models/teacher.model";
+import { currentTeacher } from "@/lib/actions/teacher.actions";
 
 type CourseRef = string;
 
@@ -22,8 +24,10 @@ const Home = async () => {
   
   let relevantCourses: ICourse[] = [];
   let relevantLabsWithCourseRefs = new Map<CourseRef, ILab[]>();
-  let relevantAssignmentsWithCourseRefs = new Map<CourseRef, IAssignment[]>
-  let relevantQuizzesWithCourseRefs = new Map<CourseRef, IQuiz[]>
+  let relevantAssignmentsWithCourseRefs = new Map<CourseRef, IAssignment[]>();
+  let relevantQuizzesWithCourseRefs = new Map<CourseRef, IQuiz[]>();
+  let populatedStudentsWithCourseRef = new Map<CourseRef, IStudent[]>();
+  let populatedTeacherWithCourseRef = new Map<CourseRef, ITeacher>();
 
   if(isStudent()) {
     const student: IStudent = await currentStudent();
@@ -38,10 +42,14 @@ const Home = async () => {
     const labs = await getLabsByCourse(course._id) as ILab[];
     const assignments = await getStudentAssignmentsByCourse(course._id) as IAssignment[];
     const quizes = await getAllQuizesByCourse(course._id) as IQuiz[]; 
+    const students = await getAllStudentsByCourse(course._id) as IStudent[];
+    
 
     relevantLabsWithCourseRefs.set(course._id, labs);
     relevantAssignmentsWithCourseRefs.set(course._id, assignments);
     relevantQuizzesWithCourseRefs.set(course._id, quizes);
+    populatedStudentsWithCourseRef.set(course._id, students);
+    populatedTeacherWithCourseRef.set(course._id, await currentTeacher() as ITeacher);
     
 
     //adding the current student to each eligible course
@@ -54,7 +62,7 @@ const Home = async () => {
   }
 
   
-
+  // console.log('teacher: ', populatedTeacherWithCourseRef);
   
   let initialItems = relevantCourses.map((course, index) => ({
     
@@ -94,6 +102,24 @@ const Home = async () => {
           content: {
               title: `Exams for course: ${course.name}`,
               quizes: relevantQuizzesWithCourseRefs.get(course._id) || [],
+              courseObjectId: course._id
+          }
+        },
+        {
+          id: index + 1.5,
+          title: "Students",
+          content: {
+              title: `Students enrolled in course: ${course.name}`,
+              students: populatedStudentsWithCourseRef.get(course._id) || [],
+              courseObjectId: course._id
+          }
+        },
+        {
+          id: index + 1.6,
+          title: "Teachers",
+          content: {
+              title: `Teachers enrolled in course: ${course.name}`,
+              teacher: populatedTeacherWithCourseRef.get(course._id),
               courseObjectId: course._id
           }
         },

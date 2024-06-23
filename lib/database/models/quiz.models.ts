@@ -59,7 +59,7 @@ const questionSchema = new Schema({
     type: String,
     required: true
   },
-  options: [optionSchema]  // Embedding Option schema here
+  options: [optionSchema]  
 });
 
 const quizSchema = new Schema({
@@ -106,7 +106,7 @@ export const quizFeedbackSchema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Using the models object to avoid recompilation errors
+
 export const Option = models.Option || model('Option', optionSchema);
 export const Question = models.Question || model('Question', questionSchema);
 export const Quiz = models.Quiz || model('Quiz', quizSchema);

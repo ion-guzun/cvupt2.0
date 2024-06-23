@@ -136,3 +136,13 @@ export async function getCourseById(courseRef: string) {
         console.log(error);
     }
 }
+
+export async function populateStudentsByCourse(courseRef: string) {
+    try {
+        await connectToDatabase();
+
+        
+    } catch (error) {
+        console.log(error);
+    }
+}

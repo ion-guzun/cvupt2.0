@@ -13,9 +13,13 @@ import { AssignmentCard } from './AssignmentCard';
 import QuizCard from './QuizCard';
 import { Textarea } from './ui/textarea';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Separator } from './ui/separator';
+import { ITeacher } from '@/lib/database/models/teacher.model';
 
 export const MainContent: React.FC<MainContentProps> = ({ content }) => {
   const userEmail = useUser().user?.emailAddresses[0].emailAddress;
+  const lastSignIn = useUser().user?.lastSignInAt;
   const router = useRouter();
 
   const handleCreateLab = () => {
@@ -34,6 +38,24 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
 
   const isTeacherEmail = userEmail?.endsWith('github@gmail.com');
   const isStudentEmail = userEmail?.endsWith('@student.upt.ro');
+  const renderTeacherInfo = (teacher: ITeacher) => (
+    <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-white w-full max-w-4xl mt-8">
+      <Image 
+        src={teacher.photo}
+        alt={`${teacher.firstName} ${teacher.lastName}`}
+        height={60}
+        width={60}
+        className="rounded-full"
+      />
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold">{teacher.firstName} {teacher.lastName}</h3>
+        <p className="text-gray-600">{teacher.email}</p>
+        <p className="text-sm text-gray-500">Joined at: {teacher.joinedAt ? new Date(teacher.joinedAt).toLocaleString() : 'N/A'}</p>
+        <p className="text-sm text-gray-500">Last seen at: {lastSignIn?.toLocaleString() ?? 'N/A'}</p>
+      </div>
+    </div>
+  );
+
 
   return (
     <div className="ml-64 p-8 overflow-y-auto h-full">
@@ -137,6 +159,26 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
             </AccordionItem>
           </Accordion>
         ))}
+        {content.students?.map((stud, i) => (
+              <div key={`student-${i}`} className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-white">
+                <Image 
+                  src={stud.photo}
+                  alt={`${stud.firstName} ${stud.lastName}`}
+                  height={60}
+                  width={60}
+                  className="rounded-full"
+                />
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">{stud.firstName} {stud.lastName}</h3>
+                  <p className="text-gray-600">{stud.email}</p>
+                  <p className="text-sm text-gray-500">Joined at: {stud.joinedAt ? new Date(stud.joinedAt).toLocaleString() : 'N/A'}</p>
+                  <p className="text-sm text-gray-500">Last seen at: {lastSignIn?.toLocaleString() ?? 'N/A'}</p>
+                </div>
+              </div>
+          ))}
+          {
+            content.teacher && renderTeacherInfo(content.teacher)
+          }
       </div>
     </div>
   );

@@ -14,6 +14,9 @@ export interface Content {
   labs?: ILab[]; 
   assignments?: IAssignment[]; 
   quizes?: IQuiz[];
+  students?: IStudent[];
+  teacher?: ITeacher
+  
   actionButtons?: React.ReactNode[]
   courseObjectId?: string;
 }

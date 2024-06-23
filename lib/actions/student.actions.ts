@@ -80,6 +80,25 @@ export async function getStudentById(studentRef: string) {
   }
 }
 
+export async function getAllStudentsByCourse(courseRef: string) {
+  try {
+    await connectToDatabase();
+
+    const course: ICourse | null = await Course.findById(courseRef);
+    const studentsRefs = course?.studentsEnrolledIn;
+
+    let studentsPopulated: IStudent[] = [];
+    for(const studentRef of studentsRefs!) {
+      const student: IStudent | null = await Student.findById(studentRef);
+      studentsPopulated.push(student!);
+    }
+
+    return JSON.parse(JSON.stringify(studentsPopulated));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 
 
