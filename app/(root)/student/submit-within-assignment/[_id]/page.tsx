@@ -22,12 +22,14 @@ import {
 
 const submitAssignmentForm = ({ params: { _id } }: SearchParamProps) => {
   const router = useRouter();
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
       <form 
         action={async (formData: FormData) => {
           const result = await uploadFiles(formData, _id);
+          
           const message = result?.message ?? "An error occurred";
           toast({
             title: message,

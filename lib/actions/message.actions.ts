@@ -4,10 +4,6 @@ import pusherServer from "@/pusher/pusherServer";
 import Conversation from "../database/models/conversation.model";
 import { connectToDatabase } from "../database";
 
-
-
-
-
 export async function createMessage(senderId: string | undefined, receiverId: string | undefined, text: string) {
   try {
     await connectToDatabase();
