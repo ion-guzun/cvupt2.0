@@ -30,8 +30,9 @@ const QuizResult = async ({ params: { _id } }: SearchParamProps) => {
         <ul className="space-y-4">
           {qF.responses.map((response, index) => (
             <li key={index} className="border-b border-gray-200 pb-4">
-              <p className="text-gray-600"><strong>Question:</strong> {response.question.questionText}</p>
-              <p className="text-gray-600"><strong>Selected Option:</strong> {response.selectedOption}</p>
+              {/* <p className="text-gray-600"><strong>Question:</strong> {response.question.questionText}</p>
+              <p className="text-gray-600"><strong>Selected Option:</strong> {response.selectedOption}</p> */}
+              <p className='text-gray-600'>Question: {index + 1}</p>
               <p className="text-gray-600"><strong>Correct:</strong> {response.isCorrect ? "Yes" : "No"}</p>
             </li>
           ))}
@@ -39,11 +40,10 @@ const QuizResult = async ({ params: { _id } }: SearchParamProps) => {
       </div>
       <div className="mt-6">
         <Link href='/'>
-          <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">
+          <Button>
             Back to dashboard
           </Button>
         </Link>
-        {qF.mark < 5 && <p className="mt-4 text-red-600 text-lg font-semibold">Ne vedem la anu!</p>}
       </div>
     </div>
   );

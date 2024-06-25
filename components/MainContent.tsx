@@ -22,6 +22,20 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
   const lastSignIn = useUser().user?.lastSignInAt;
   const router = useRouter();
 
+  const formatDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true 
+    };
+    return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+  };
+
   const handleCreateLab = () => {
     router.push(`/teacher/create-lab-within-course/${content.courseObjectId}`);
   };
@@ -31,6 +45,9 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
   const handleCreateQuiz = () => {
     router.push(`/teacher/create-quiz-within-course/${content.courseObjectId}`);
   };
+  const handleViewProfile = (userRef: string) => {
+    router.push(`/user/user-profile/${userRef}`);
+  }
 
   if (!content) {
     return <div>No content available.</div>;
@@ -55,7 +72,6 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
       </div>
     </div>
   );
-
 
   return (
     <div className="ml-64 p-8 overflow-y-auto h-full">
@@ -159,26 +175,38 @@ export const MainContent: React.FC<MainContentProps> = ({ content }) => {
             </AccordionItem>
           </Accordion>
         ))}
-        {content.students?.map((stud, i) => (
-              <div key={`student-${i}`} className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-white">
-                <Image 
-                  src={stud.photo}
-                  alt={`${stud.firstName} ${stud.lastName}`}
-                  height={60}
-                  width={60}
-                  className="rounded-full"
-                />
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold">{stud.firstName} {stud.lastName}</h3>
-                  <p className="text-gray-600">{stud.email}</p>
-                  <p className="text-sm text-gray-500">Joined at: {stud.joinedAt ? new Date(stud.joinedAt).toLocaleString() : 'N/A'}</p>
-                  <p className="text-sm text-gray-500">Last seen at: {lastSignIn?.toLocaleString() ?? 'N/A'}</p>
-                </div>
-              </div>
-          ))}
-          {
-            content.teacher && renderTeacherInfo(content.teacher)
-          }
+        {content.users && content.users.length > 0 && (
+          <div className="flex flex-col space-y-4">
+            <Link href='/messages'>
+              <Button className="self-start">Conversations</Button>
+            </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {content.users?.map((user, i) => (
+    <div
+      // onClick={() => handleViewProfile(user._id)}
+      key={`user-${i}`}
+      className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm bg-white transform transition-transform duration-300 hover:scale-105"
+    >
+      <Image
+        src={user.photo}
+        alt=''
+        width={40}
+        height={40}
+        className="rounded-full"
+      />
+      <div>
+        <h1 className="text-sm font-medium">{user.email}</h1>
+        <h1 className="text-xs text-gray-500"><b>{user.email.endsWith('github@gmail.com') ? 'Teacher' : 'Student'}</b></h1>
+        <h1 className="text-xs">{user.firstName} {user.lastName}</h1>
+        <h1 className="text-xs text-gray-500">Last seen at: {lastSignIn?.toLocaleString() ?? 'N/A'}</h1>
+        <h1 className="text-xs text-gray-500">Joined at: {user.joinedAt ? new Date(user.joinedAt).toLocaleString() : 'N/A'}</h1>
+      </div>
+    </div>
+  ))}
+</div>
+
+          </div>
+        )}
       </div>
     </div>
   );

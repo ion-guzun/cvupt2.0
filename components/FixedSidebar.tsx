@@ -82,9 +82,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ items, onSelectItem }) => {
                       />
                     </div>
                     )}
-                    {subItem.title === "Teachers" && (
+                    {subItem.title === "Users" && (
                       <Image
-                        src='/teacher.svg'
+                        src='/user-id.svg'
                         width={32}
                         height={32}
                         alt=''

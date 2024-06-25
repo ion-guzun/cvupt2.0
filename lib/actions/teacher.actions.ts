@@ -1,11 +1,11 @@
 'use server'
 import { getUserObjectId } from "@/helpers";
 import { connectToDatabase } from "../database";
-import Teacher from "../database/models/teacher.model";
+import Teacher, { ITeacher } from "../database/models/teacher.model";
 import { CreateUserParams } from "../database/models/user.model";
 import Submission, { ISubmission } from "../database/models/submission.model";
 import { TeacherFeedback } from "@/types";
-import Course from "../database/models/course.model";
+import Course, { ICourse } from "../database/models/course.model";
 
 export async function createTeacher(teacher: CreateUserParams) {
     try {
@@ -67,7 +67,19 @@ export async function isFeedbacked(submissionRef: string) {
   }
 }
 
+export async function getTeacherByCourse(courseRef: string) {
+  try {
+    await connectToDatabase();
 
+    const course: ICourse | null = await Course.findById(courseRef);
+    const teacherRef = course?.createdBy;
+    const teacher: ITeacher | null = await Teacher.findById(teacherRef);
+
+    return JSON.parse(JSON.stringify(teacher));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 

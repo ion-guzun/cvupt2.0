@@ -15,7 +15,8 @@ import { IQuiz } from "@/lib/database/models/quiz.models";
 import { getAllQuizesByCourse } from "@/lib/actions/quiz.actions";
 import { Button } from "@/components/ui/button";
 import { ITeacher } from "@/lib/database/models/teacher.model";
-import { currentTeacher } from "@/lib/actions/teacher.actions";
+import { currentTeacher, getTeacherByCourse } from "@/lib/actions/teacher.actions";
+import { IUserCombined, getAllUsers, getAllUsersByCourse } from "@/lib/actions/user.actions";
 
 type CourseRef = string;
 
@@ -28,6 +29,7 @@ const Home = async () => {
   let relevantQuizzesWithCourseRefs = new Map<CourseRef, IQuiz[]>();
   let populatedStudentsWithCourseRef = new Map<CourseRef, IStudent[]>();
   let populatedTeacherWithCourseRef = new Map<CourseRef, ITeacher>();
+  let populatedUsersWithCourseRef = new Map<CourseRef, IUserCombined[]>();
 
   if(isStudent()) {
     const student: IStudent = await currentStudent();
@@ -43,13 +45,16 @@ const Home = async () => {
     const assignments = await getStudentAssignmentsByCourse(course._id) as IAssignment[];
     const quizes = await getAllQuizesByCourse(course._id) as IQuiz[]; 
     const students = await getAllStudentsByCourse(course._id) as IStudent[];
+    const teacher = await getTeacherByCourse(course._id) as ITeacher;
+    const users = await getAllUsersByCourse(course._id) as IUserCombined[];
     
 
     relevantLabsWithCourseRefs.set(course._id, labs);
     relevantAssignmentsWithCourseRefs.set(course._id, assignments);
     relevantQuizzesWithCourseRefs.set(course._id, quizes);
     populatedStudentsWithCourseRef.set(course._id, students);
-    populatedTeacherWithCourseRef.set(course._id, await currentTeacher() as ITeacher);
+    populatedTeacherWithCourseRef.set(course._id, teacher);
+    populatedUsersWithCourseRef.set(course._id, users);
     
 
     //adding the current student to each eligible course
@@ -60,9 +65,9 @@ const Home = async () => {
     // !we already have the teacher in course.createdBy
 
   }
-
   
-  // console.log('teacher: ', populatedTeacherWithCourseRef);
+  // console.log('all course users: ', populatedUsersWithCourseRef);
+  
   
   let initialItems = relevantCourses.map((course, index) => ({
     
@@ -107,22 +112,22 @@ const Home = async () => {
         },
         {
           id: index + 1.5,
-          title: "Students",
+          title: "Users",
           content: {
-              title: `Students enrolled in course: ${course.name}`,
-              students: populatedStudentsWithCourseRef.get(course._id) || [],
+              title: `Users enrolled in course: ${course.name}`,
+              users: populatedUsersWithCourseRef.get(course._id) || [],
               courseObjectId: course._id
           }
         },
-        {
-          id: index + 1.6,
-          title: "Teachers",
-          content: {
-              title: `Teachers enrolled in course: ${course.name}`,
-              teacher: populatedTeacherWithCourseRef.get(course._id),
-              courseObjectId: course._id
-          }
-        },
+        // {
+        //   id: index + 1.6,
+        //   title: "Teachers",
+        //   content: {
+        //       title: `Teachers enrolled in course: ${course.name}`,
+        //       teacher: populatedTeacherWithCourseRef.get(course._id),
+        //       courseObjectId: course._id
+        //   }
+        // },
     ]
   }));
 

@@ -21,8 +21,8 @@ export const Header = async () => {
                 <Link href='/info/credits' className="text-xs" target="_blank" rel="noopener noreferrer">
                     Credits
                 </Link>
-                <Link href='https://www.upt.ro/' className="text-xs" target="_blank" rel="noopener noreferrer">
-                    UPT
+                <Link href='https://cv.upt.ro/login/index.php' className="text-xs" target="_blank" rel="noopener noreferrer">
+                    Original Platform
                 </Link>
                 <Link href='/info/privacy-policy' className="text-xs" target="_blank" rel="noopener noreferrer">
                     Privacy Policy

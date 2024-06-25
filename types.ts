@@ -7,6 +7,10 @@ import { ITeacher } from "./lib/database/models/teacher.model";
 import { IQuiz } from "./lib/database/models/quiz.models";
 
 // types.ts
+type IUser = ITeacher | IStudent;
+
+
+
 export interface Content {
   title: string;
   body?: string | undefined;
@@ -16,6 +20,7 @@ export interface Content {
   quizes?: IQuiz[];
   students?: IStudent[];
   teacher?: ITeacher
+  users?: IUser[]
   
   actionButtons?: React.ReactNode[]
   courseObjectId?: string;
