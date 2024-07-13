@@ -1,1 +1,1 @@
-CVUPT 2.0 is an e-learning platform developed as part of my bachelor's project. Inspired by the original university platform Campus Virtual al UPT, this project includes all the basic features and introduces several improvements to provide a better user experience for both students and teachers.
+CVUPT 2.0 is an e-learning platform developed as part of my bachelor's project. Inspired by the original university platform cv.upt.ro, this project includes all the basic features and introduces several improvements to provide a better user experience for both students and teachers.
